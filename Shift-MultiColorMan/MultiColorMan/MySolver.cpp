@@ -113,21 +113,50 @@ void MySolver::Update(void)
 void MySolver::ResolveCollision(MySolver* a_pOther)
 {
 	float fMagThis = glm::length(m_v3Velocity);
-	float fMagOther = glm::length(m_v3Velocity); // should maybe be other's velocity?
+	float fMagOther = glm::length(a_pOther->m_v3Velocity); // should maybe be other's velocity?
 
 	if (fMagThis > 0.015f || fMagOther > 0.015f)
 	{
 		//a_pOther->ApplyForce(GetVelocity());
-		ApplyForce(-m_v3Velocity);
-		a_pOther->ApplyForce(m_v3Velocity);
+		//ApplyForce(-m_v3Velocity);
+		//a_pOther->ApplyForce(m_v3Velocity);
+		vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
+		if (glm::length(v3Direction) != 0)
+			v3Direction = glm::normalize(v3Direction);
+		for (int i = 0; i < 3; i++)
+		{
+			if (v3Direction[i] == 0) {
+				v3Direction[i] = 1;
+			}
+			else {
+				v3Direction[i] = 0;
+			}
+		}
+		m_v3Velocity *= v3Direction;
+		if (v3Direction[2] == 0) {
+			ApplyForce(vector3(0.0f, 0.035f, 0.0f));
+		}
 	}
 	else
 	{
 		vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
 		if(glm::length(v3Direction) != 0)
 			v3Direction = glm::normalize(v3Direction);
-		v3Direction *= 0.04f;
-		ApplyForce(v3Direction);
-		a_pOther->ApplyForce(-v3Direction);
+		//ApplyForce(v3Direction);
+		//a_pOther->ApplyForce(-v3Direction);
+
+		for (int i = 0; i < 3; i++)
+		{
+			if (v3Direction[i] == 0) {
+				v3Direction[i] = 1;
+			}
+			else {
+				v3Direction[i] = 0;
+			}
+		}
+		m_v3Velocity *= v3Direction;
+		if (v3Direction[2] == 0) {
+			ApplyForce(vector3(0.0f, 0.035f, 0.0f));
+		}
 	}
 }
