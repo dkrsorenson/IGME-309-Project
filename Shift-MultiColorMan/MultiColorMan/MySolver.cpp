@@ -7,6 +7,7 @@ void MySolver::Init(void)
 	m_v3Position = ZERO_V3;
 	m_v3Velocity = ZERO_V3;
 	m_fMass = 1.0f;
+	//SetIsGrounded(true);
 }
 void MySolver::Swap(MySolver& other)
 {
@@ -50,6 +51,9 @@ vector3 MySolver::GetVelocity(void) { return m_v3Velocity; }
 
 void MySolver::SetMass(float a_fMass) { m_fMass = a_fMass; }
 float MySolver::GetMass(void) { return m_fMass; }
+
+void MySolver::SetIsGrounded(bool a_isGrounded) { isGrounded = a_isGrounded; }
+bool MySolver::GetIsGrounded(void) { return isGrounded; }
 
 //Methods
 void MySolver::ApplyFriction(float a_fFriction)
@@ -102,32 +106,86 @@ void MySolver::Update(void)
 
 	m_v3Position += m_v3Velocity;
 			
-	if (m_v3Position.y <= 0)
-	{
-		m_v3Position.y = 0;
-		m_v3Velocity.y = 0;
-	}
+	//if (m_v3Position.y <= 1.0f)
+	//{
+	//	m_v3Position.y = 1.0f;
+	//	m_v3Velocity.y = 0;
+	//	SetIsGrounded(true);
+	//}
+	//else if (m_v3Position.y > 1.0f) {
+	//	SetIsGrounded(false);
+	//}
 
 	m_v3Acceleration = ZERO_V3;
 }
 void MySolver::ResolveCollision(MySolver* a_pOther)
 {
 	float fMagThis = glm::length(m_v3Velocity);
-	float fMagOther = glm::length(m_v3Velocity); // should maybe be other's velocity?
+	float fMagOther = glm::length(a_pOther->m_v3Velocity); // should maybe be other's velocity?
 
-	if (fMagThis > 0.015f || fMagOther > 0.015f)
+	if (m_v3Position.y <= a_pOther->m_v3Position.y + a_pOther->GetSize().y)
 	{
-		//a_pOther->ApplyForce(GetVelocity());
-		ApplyForce(-m_v3Velocity);
-		a_pOther->ApplyForce(m_v3Velocity);
+		m_v3Position.y = a_pOther->m_v3Position.y + a_pOther->GetSize().y;
+		m_v3Velocity.y = 0;
+		SetIsGrounded(true);
 	}
-	else
-	{
-		vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
-		if(glm::length(v3Direction) != 0)
-			v3Direction = glm::normalize(v3Direction);
-		v3Direction *= 0.04f;
-		ApplyForce(v3Direction);
-		a_pOther->ApplyForce(-v3Direction);
-	}
+	/*else if (m_v3Position.y > a_pOther->m_v3Position.y + a_pOther->GetSize().y) {
+		SetIsGrounded(false);
+	}*/
+
+
+	//if (m_v3Position.y <= 1.0f)
+	//{
+	//	m_v3Position.y = 1.0f;
+	//	m_v3Velocity.y = 0;
+	//	SetIsGrounded(true);
+	//}
+	//else if (m_v3Position.y > 1.0f) {
+	//	SetIsGrounded(false);
+	//}
+
+	//if (fMagThis > 0.015f || fMagOther > 0.015f)
+	//{
+	//	//a_pOther->ApplyForce(GetVelocity());
+	//	//ApplyForce(-m_v3Velocity);
+	//	//a_pOther->ApplyForce(m_v3Velocity);
+	//	vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
+	//	if (glm::length(v3Direction) != 0)
+	//		v3Direction = glm::normalize(v3Direction);
+	//	for (int i = 0; i < 3; i++)
+	//	{
+	//		if (v3Direction[i] == 0) {
+	//			v3Direction[i] = 1;
+	//		}
+	//		else {
+	//			v3Direction[i] = 0;
+	//		}
+	//	}
+	//	m_v3Velocity *= v3Direction;
+	//	if (v3Direction[2] == 0) {
+	//		ApplyForce(vector3(0.0f, 0.035f, 0.0f));
+	//	}
+	//}
+	//else
+	//{
+	//	vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
+	//	if (glm::length(v3Direction) != 0)
+	//		v3Direction = glm::normalize(v3Direction);
+	//	//ApplyForce(v3Direction);
+	//	//a_pOther->ApplyForce(-v3Direction);
+
+	//	for (int i = 0; i < 3; i++)
+	//	{
+	//		if (v3Direction[i] == 0) {
+	//			v3Direction[i] = 1;
+	//		}
+	//		else {
+	//			v3Direction[i] = 0;
+	//		}
+	//	}
+	//	m_v3Velocity *= v3Direction;
+	//	if (v3Direction[2] == 0) {
+	//		ApplyForce(vector3(0.0f, 0.035f, 0.0f));
+	//	}
+	//}
 }

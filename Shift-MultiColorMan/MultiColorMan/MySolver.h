@@ -17,6 +17,7 @@ class MySolver
 	vector3 m_v3Size = vector3(1.0f); //Size of the MySolver
 	vector3 m_v3Velocity = ZERO_V3; //Velocity of the MySolver
 	float m_fMass = 1.0f; //Mass of the solver
+	bool isGrounded = false; // If the entity is grounded or not
 public:
 	/*
 	USAGE: Constructor
@@ -100,6 +101,18 @@ public:
 	OUTPUT: mass of the object
 	*/
 	float GetMass(void);
+	/*
+	USAGE: Sets whether or not the solver is grounded
+	ARGUMENTS: If the solver is grounded
+	OUTPUT: ---
+	*/
+	void SetIsGrounded(bool a_isGrounded);
+	/*
+	USAGE: Gets whether or not the solver is grounded
+	ARGUMENTS: ---
+	OUTPUT: If the solver is grounded
+	*/
+	bool GetIsGrounded(void);
 
 	/*
 	USAGE: Applies friction to the movement

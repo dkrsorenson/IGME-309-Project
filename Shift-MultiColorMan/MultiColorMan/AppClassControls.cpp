@@ -72,9 +72,17 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	{
 	default: break;
 	case sf::Keyboard::Space:
+	{	
 		m_sound.play();
-		m_pEntityMngr->ApplyForce(vector3(0.0f, 1.0f, 0.0f), "Steve");
+		bool isGrounded = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->GetIsGrounded();
+		//std::cout << isGrounded << std::endl;
+		if (isGrounded) {
+			m_pEntityMngr->ApplyForce(vector3(0.0f, 1.0f, 0.0f), "Steve");
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->SetIsGrounded(false);
+		}
+
 		break;
+	}
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = true;
@@ -422,6 +430,11 @@ void Application::ProcessKeyboard(void)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		m_pEntityMngr->ApplyForce(vector3(1.0f * fDelta, 0.0f, 0.0f), "Steve");
+	}
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+	{
+		// Shift colors
 	}
 
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
