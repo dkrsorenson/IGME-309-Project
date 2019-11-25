@@ -2,17 +2,18 @@
 using namespace Simplex;
 void Application::InitVariables(void)
 {
-	//Set the position and target of the camera
-	m_pCameraMngr->SetPositionTargetAndUpward(
-		vector3(0.0f, 5.0f, 25.0f), //Position
-		vector3(0.0f, 0.0f, 0.0f),	//Target
-		AXIS_Y);					//Up
 
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light (0 is reserved for ambient light)
 
 	m_pEntityMngr->AddEntity("Minecraft\\Steve.obj", "Steve");
 	m_pEntityMngr->UsePhysicsSolver();
-	
+
+	//Set the position and target of the camera
+	m_pCameraMngr->SetPositionTargetAndUpward(
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 15.0f), //Position
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 5.0f),	//Target
+		AXIS_Y);					//Up
+
 	for (int i = -4; i < 5; i++)
 	{
 		if (i == 0)
@@ -39,7 +40,12 @@ void Application::Update(void)
 	ArcBall();
 
 	//Is the first person camera active?
-	CameraRotation();
+	//CameraRotation();
+		//Set the position and target of the camera
+	m_pCameraMngr->SetPositionTargetAndUpward(
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 15.0f), //Position
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 5.0f),	//Target
+		AXIS_Y);					//Up
 
 	//Update Entity Manager
 	m_pEntityMngr->Update();
