@@ -115,10 +115,15 @@ void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 	vector3 accelLimiter = vector3(1.0f);
 	vector3 velocityLimiter = vector3(1.0f);
 
+	//Depending on which plane of this is colliding with other
+	//we will 0 out the accel and velocity of that direction
 	switch (collidingPlane)
 	{
+	//ex: if the right side of this is colliding with the other object,
 	case eContactPlane::MAX_X:
+		//if the object has positive x accel or velocity
 		if (m_v3Acceleration.x > 0)
+			//set it to 0
 			accelLimiter.x = 0;
 		if (m_v3Velocity.x > 0)
 			velocityLimiter.x = 0;
@@ -136,7 +141,10 @@ void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 			velocityLimiter.y = 0;
 		break;
 	case eContactPlane::MIN_Y:
+		//In the case that this is on top of other
+		//a force opposite to gravity must be applied to prevent sinking into the block
 		ApplyForce(-m_fGravity);
+		//and proceed as usual
 		if (m_v3Acceleration.y < 0)
 			accelLimiter.y = 0;
 		if (m_v3Velocity.y < 0)
