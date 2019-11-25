@@ -63,6 +63,19 @@ void Application::InitVariables(void)
 
 		nextXPos += 2.0f;
 	}
+
+	nextXPos = -30.0f;
+	for (int i = 0; i < 100; i++)
+	{
+		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i));
+		vector3 v3Position = vector3(nextXPos, -4.0f, 
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().z -
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
+		matrix4 m4Position = glm::translate(v3Position);
+		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
+
+		nextXPos += 2.0f;
+	}
 }
 
 void Application::Update(void)
