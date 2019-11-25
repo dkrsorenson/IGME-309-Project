@@ -7,6 +7,7 @@ void MySolver::Init(void)
 	m_v3Position = ZERO_V3;
 	m_v3Velocity = ZERO_V3;
 	m_fMass = 1.0f;
+	//isGrounded = true;
 }
 void MySolver::Swap(MySolver& other)
 {
@@ -50,6 +51,9 @@ vector3 MySolver::GetVelocity(void) { return m_v3Velocity; }
 
 void MySolver::SetMass(float a_fMass) { m_fMass = a_fMass; }
 float MySolver::GetMass(void) { return m_fMass; }
+
+void MySolver::SetIsGrounded(bool a_isGrounded) { isGrounded = a_isGrounded; }
+bool MySolver::GetIsGrounded(void) { return isGrounded; }
 
 //Methods
 void MySolver::ApplyFriction(float a_fFriction)
@@ -106,6 +110,7 @@ void MySolver::Update(void)
 	{
 		m_v3Position.y = 0;
 		m_v3Velocity.y = 0;
+		SetIsGrounded(true);
 	}
 
 	m_v3Acceleration = ZERO_V3;
@@ -149,6 +154,9 @@ void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 			accelLimiter.y = 0;
 		if (m_v3Velocity.y < 0)
 			velocityLimiter.y = 0;
+
+		// Set is grounded if he's not already grounded
+		if (isGrounded == false) SetIsGrounded(true);
 		break;
 	case eContactPlane::MAX_Z:
 		if (m_v3Acceleration.z > 0)

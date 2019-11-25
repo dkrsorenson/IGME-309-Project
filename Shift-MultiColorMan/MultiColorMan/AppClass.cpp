@@ -21,7 +21,7 @@ void Application::InitVariables(void)
 		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i));
 		vector3 v3Position = vector3(i*5, 0, 
 			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().z - 
-			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z)));
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_" + std::to_string(i)))->GetRigidBody()->GetHalfWidth().z)));
 		v3Position.y = 0.0f;
 		matrix4 m4Position = glm::translate(v3Position);
 		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));

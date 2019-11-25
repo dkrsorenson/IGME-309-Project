@@ -17,7 +17,7 @@ class MySolver
 	vector3 m_v3Size = vector3(1.0f); //Size of the MySolver
 	vector3 m_v3Velocity = ZERO_V3; //Velocity of the MySolver
 	float m_fMass = 1.0f; //Mass of the solver
-
+	bool isGrounded = false; // If the entity is grounded or not
 	const vector3 m_fGravity = vector3(0.0f, -0.035f, 0.0f);
 public:
 	/*
@@ -89,7 +89,6 @@ public:
 	OUTPUT: velocity of the solver
 	*/
 	vector3 GetVelocity(void);
-
 	/*
 	USAGE: Sets the mass of the solver
 	ARGUMENTS: float a_fMass -> mass to set
@@ -102,7 +101,18 @@ public:
 	OUTPUT: mass of the object
 	*/
 	float GetMass(void);
-
+	/*
+	USAGE: Sets whether or not the solver is grounded
+	ARGUMENTS: If the solver is grounded
+	OUTPUT: ---
+	*/
+	void SetIsGrounded(bool a_isGrounded);
+	/*
+	USAGE: Gets whether or not the solver is grounded
+	ARGUMENTS: ---
+	OUTPUT: If the solver is grounded
+	*/
+	bool GetIsGrounded(void);
 	/*
 	USAGE: Applies friction to the movement
 	ARGUMENTS: float a_fFriction = 0.1f -> friction to apply negative friction gets minimized to 0.01f
