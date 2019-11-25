@@ -316,7 +316,7 @@ void Simplex::MyEntity::ResolveCollision(MyEntity* a_pOther)
 {
 	if (m_bUsePhysicsSolver)
 	{
-		m_pSolver->ResolveCollision(a_pOther->GetSolver());
+		m_pSolver->ResolveCollision(a_pOther->GetSolver(), GetRigidBody()->GetCollidingPlane(a_pOther->GetRigidBody()));
 	}
 }
 void Simplex::MyEntity::UsePhysicsSolver(bool a_bUse)

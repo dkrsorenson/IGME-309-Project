@@ -90,7 +90,7 @@ vector3 RoundSmallVelocity(vector3 a_v3Velocity, float minVelocity = 0.01f)
 }
 void MySolver::Update(void)
 {
-	ApplyForce(vector3(0.0f, -0.035f, 0.0f));
+	ApplyForce(m_fGravity);
 
 	m_v3Velocity += m_v3Acceleration;
 	
@@ -110,53 +110,62 @@ void MySolver::Update(void)
 
 	m_v3Acceleration = ZERO_V3;
 }
-void MySolver::ResolveCollision(MySolver* a_pOther)
+void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 {
 	float fMagThis = glm::length(m_v3Velocity);
 	float fMagOther = glm::length(a_pOther->m_v3Velocity); // should maybe be other's velocity?
+	
+	vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
+	if (glm::length(v3Direction) != 0)
+		v3Direction = glm::normalize(v3Direction);
 
-	if (fMagThis > 0.015f || fMagOther > 0.015f)
-	{
-		//a_pOther->ApplyForce(GetVelocity());
-		//ApplyForce(-m_v3Velocity);
-		//a_pOther->ApplyForce(m_v3Velocity);
-		vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
-		if (glm::length(v3Direction) != 0)
-			v3Direction = glm::normalize(v3Direction);
-		for (int i = 0; i < 3; i++)
-		{
-			if (v3Direction[i] == 0) {
-				v3Direction[i] = 1;
-			}
-			else {
-				v3Direction[i] = 0;
-			}
-		}
-		m_v3Velocity *= v3Direction;
-		if (v3Direction[2] == 0) {
-			ApplyForce(vector3(0.0f, 0.035f, 0.0f));
-		}
-	}
-	else
-	{
-		vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
-		if(glm::length(v3Direction) != 0)
-			v3Direction = glm::normalize(v3Direction);
-		//ApplyForce(v3Direction);
-		//a_pOther->ApplyForce(-v3Direction);
+	vector3 accelLimiter = vector3(1.0f);
+	vector3 velocityLimiter = vector3(1.0f);
 
-		for (int i = 0; i < 3; i++)
-		{
-			if (v3Direction[i] == 0) {
-				v3Direction[i] = 1;
-			}
-			else {
-				v3Direction[i] = 0;
-			}
-		}
-		m_v3Velocity *= v3Direction;
-		if (v3Direction[2] == 0) {
-			ApplyForce(vector3(0.0f, 0.035f, 0.0f));
-		}
+	switch (collidingPlane)
+	{
+	case eContactPlane::MAX_X:
+		if (m_v3Acceleration.x > 0)
+			accelLimiter.x = 0;
+		if (m_v3Velocity.x > 0)
+			velocityLimiter.x = 0;
+		break;
+	case eContactPlane::MIN_X:
+		if (m_v3Acceleration.x < 0)
+			accelLimiter.x = 0;
+		if (m_v3Velocity.x < 0)
+			velocityLimiter.x = 0;
+		break;
+	case eContactPlane::MAX_Y:
+		if (m_v3Acceleration.y > 0)
+			accelLimiter.y = 0;
+		if (m_v3Velocity.y > 0)
+			velocityLimiter.y = 0;
+		break;
+	case eContactPlane::MIN_Y:
+		ApplyForce(-m_fGravity);
+		if (m_v3Acceleration.y < 0)
+			accelLimiter.y = 0;
+		if (m_v3Velocity.y < 0)
+			velocityLimiter.y = 0;
+		break;
+	case eContactPlane::MAX_Z:
+		if (m_v3Acceleration.z > 0)
+			accelLimiter.z = 0;
+		if (m_v3Velocity.z > 0)
+			velocityLimiter.z = 0;
+		break;
+	case eContactPlane::MIN_Z:
+		if (m_v3Acceleration.z < 0)
+			accelLimiter.z = 0;
+		if (m_v3Velocity.z < 0)
+			velocityLimiter.z = 0;
+		break;
+	default:
+		return;
 	}
+
+	m_v3Velocity *= velocityLimiter;
+	m_v3Acceleration *= accelLimiter;
+
 }
