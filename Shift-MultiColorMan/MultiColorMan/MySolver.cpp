@@ -1,4 +1,5 @@
 #include "MySolver.h"
+#include "AppClass.h"
 using namespace Simplex;
 //  MySolver
 void MySolver::Init(void)

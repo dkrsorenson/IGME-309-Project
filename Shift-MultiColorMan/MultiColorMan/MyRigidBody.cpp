@@ -303,11 +303,6 @@ bool MyRigidBody::IsColliding(MyRigidBody* const other)
 		if (this->m_v3MinG.y > other->m_v3MaxG.y) //this above of other
 			bColliding = false;
 
-		if (this->m_v3MaxG.z < other->m_v3MinG.z) //this behind of other
-			bColliding = false;
-		if (this->m_v3MinG.z > other->m_v3MaxG.z) //this in front of other
-			bColliding = false;
-
 		if (bColliding) //they are colliding with bounding box also
 		{
 			this->AddCollisionWith(other);
