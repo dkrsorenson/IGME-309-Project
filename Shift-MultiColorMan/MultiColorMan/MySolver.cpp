@@ -98,7 +98,7 @@ void MySolver::Update(void)
 	m_v3Velocity = CalculateMaxVelocity(m_v3Velocity, fMaxVelocity);
 
 	ApplyFriction(0.1f);
-	m_v3Velocity = RoundSmallVelocity(m_v3Velocity, 0.028f);
+	m_v3Velocity = RoundSmallVelocity(m_v3Velocity, 0.0028f);
 
 	m_v3Position += m_v3Velocity;
 			
@@ -112,13 +112,6 @@ void MySolver::Update(void)
 }
 void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 {
-	float fMagThis = glm::length(m_v3Velocity);
-	float fMagOther = glm::length(a_pOther->m_v3Velocity); // should maybe be other's velocity?
-	
-	vector3 v3Direction = m_v3Position - a_pOther->m_v3Position;
-	if (glm::length(v3Direction) != 0)
-		v3Direction = glm::normalize(v3Direction);
-
 	vector3 accelLimiter = vector3(1.0f);
 	vector3 velocityLimiter = vector3(1.0f);
 
