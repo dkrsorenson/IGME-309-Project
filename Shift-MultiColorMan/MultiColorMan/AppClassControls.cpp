@@ -393,46 +393,46 @@ void Application::ProcessKeyboard(void)
 		fMultiplier = 5.0f;
 
 #pragma region Camera Position
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I))
 		m_pCameraMngr->MoveForward(m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
 		m_pCameraMngr->MoveForward(-m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
 		m_pCameraMngr->MoveSideways(-m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::L))
 		m_pCameraMngr->MoveSideways(m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U))
 		m_pCameraMngr->MoveVertical(-m_fMovementSpeed * fMultiplier);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 		m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);
 #pragma endregion
 
 #pragma region Character Position
 	float fDelta = m_pSystem->GetDeltaTime(0);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		m_pEntityMngr->ApplyForce(vector3(-2.0f * fDelta, 0.0f, 0.0f), "Steve");
+		m_pEntityMngr->ApplyForce(vector3(-1.0f * fDelta, 0.0f, 0.0f), "Steve");
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		m_pEntityMngr->ApplyForce(vector3(2.0f * fDelta, 0.0f, 0.0f), "Steve");
+		m_pEntityMngr->ApplyForce(vector3(1.0f * fDelta, 0.0f, 0.0f), "Steve");
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-	{
-		m_pEntityMngr->ApplyForce(vector3(0.0f, 0.0f, -2.0f * fDelta), "Steve");
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	//{
+	//	m_pEntityMngr->ApplyForce(vector3(0.0f, 0.0f, -1.0f * fDelta), "Steve");
+	//}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-	{
-		m_pEntityMngr->ApplyForce(vector3(0.0f, 0.0f, 2.0f * fDelta), "Steve");
-	}
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	//{
+	//	m_pEntityMngr->ApplyForce(vector3(0.0f, 0.0f, 1.0f * fDelta), "Steve");
+	//}
 #pragma endregion
 }
 //Joystick
