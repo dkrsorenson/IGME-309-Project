@@ -2,7 +2,6 @@
 using namespace Simplex;
 std::map<String, MyEntity*> MyEntity::m_IDMap;
 //  Accessors
-Simplex::MySolver* Simplex::MyEntity::GetSolver(void) { return m_pSolver; }
 bool Simplex::MyEntity::HasThisRigidBody(MyRigidBody* a_pRigidBody) { return m_pRigidBody == a_pRigidBody; }
 Simplex::MyRigidBody::PRigidBody* Simplex::MyEntity::GetColliderArray(void) { return m_pRigidBody->GetColliderArray(); }
 uint Simplex::MyEntity::GetCollidingCount(void) { return m_pRigidBody->GetCollidingCount(); }
@@ -13,7 +12,9 @@ void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
 		return;
 
 	m_m4ToWorld = a_m4ToWorld;
-	m_pModel->SetModelMatrix(m_m4ToWorld);
+	if (m_pModel) {
+		m_pModel->SetModelMatrix(m_m4ToWorld);
+	}
 	m_pRigidBody->SetModelMatrix(m_m4ToWorld);
 
 	//experimental way of calculating a matrix components
@@ -24,89 +25,72 @@ void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
 	glm::vec4 perspective;
 	glm::decompose(m_m4ToWorld, scale, rotation, translation, skew, perspective);
 
-	m_pSolver->SetPosition(translation);
-	m_pSolver->SetSize(scale);
-
-	//m_pSolver->SetPosition(vector3(m_m4ToWorld[3]));
-
 }
-Model* Simplex::MyEntity::GetModel(void){return m_pModel;}
+//Model* Simplex::MyEntity::GetModel(void){return m_pModel;}
 MyRigidBody* Simplex::MyEntity::GetRigidBody(void){	return m_pRigidBody; }
 bool Simplex::MyEntity::IsInitialized(void){ return m_bInMemory; }
 String Simplex::MyEntity::GetUniqueID(void) { return m_sUniqueID; }
 void Simplex::MyEntity::SetAxisVisible(bool a_bSetAxis) { m_bSetAxis = a_bSetAxis; }
-void Simplex::MyEntity::SetPosition(vector3 a_v3Position) { if(m_pSolver) m_pSolver->SetPosition(a_v3Position); }
+void Simplex::MyEntity::SetPosition(vector3 a_v3Position) {  
+	m_v3Position = a_v3Position;
+}
 Simplex::vector3 Simplex::MyEntity::GetPosition(void)
 {
-	if (m_pSolver != nullptr)
-		return m_pSolver->GetPosition();
 	return vector3();
 }
 
-void Simplex::MyEntity::SetVelocity(vector3 a_v3Velocity) { if (m_pSolver) m_pSolver->SetVelocity(a_v3Velocity); }
+void Simplex::MyEntity::SetVelocity(vector3 a_v3Velocity) {  }
 Simplex::vector3 Simplex::MyEntity::GetVelocity(void)
 {
-	if (m_pSolver != nullptr)
-		return m_pSolver->GetVelocity();
 	return vector3();
 }
 
-void Simplex::MyEntity::SetMass(float a_fMass) { if (m_pSolver) m_pSolver->SetMass(a_fMass); }
+void Simplex::MyEntity::SetMass(float a_fMass) {  }
 float Simplex::MyEntity::GetMass(void)
 {
-	if (m_pSolver != nullptr)
-		return m_pSolver->GetMass();
 	return 1.0f;
 }
 //  MyEntity
 void Simplex::MyEntity::Init(void)
 {
 	m_pMeshMngr = MeshManager::GetInstance();
-	m_bInMemory = false;
+	m_bInMemory = true; // we aren't starting with a rigid body anymore
+	                    // so loaded by default?
 	m_bSetAxis = false;
-	m_pModel = nullptr;
+	//m_pModel = nullptr;
 	m_pRigidBody = nullptr;
 	m_DimensionArray = nullptr;
 	m_m4ToWorld = IDENTITY_M4;
 	m_sUniqueID = "";
 	m_nDimensionCount = 0;
-	m_bUsePhysicsSolver = false;
-	m_pSolver = nullptr;
 }
-void Simplex::MyEntity::Swap(MyEntity& other)
-{
-	m_bInMemory = false;
-	std::swap(m_pModel, other.m_pModel);
-	std::swap(m_pRigidBody, other.m_pRigidBody);
-	std::swap(m_m4ToWorld, other.m_m4ToWorld);
-	std::swap(m_pMeshMngr, other.m_pMeshMngr);
-	std::swap(m_bInMemory, other.m_bInMemory);
-	std::swap(m_sUniqueID, other.m_sUniqueID);
-	std::swap(m_bSetAxis, other.m_bSetAxis);
-	std::swap(m_nDimensionCount, other.m_nDimensionCount);
-	std::swap(m_DimensionArray, other.m_DimensionArray);
-	std::swap(m_pSolver, other.m_pSolver);
+void Simplex::MyEntity::SetModel(Model* model) {
+	m_pModel = model;
+	m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList());
 }
+
 void Simplex::MyEntity::Release(void)
 {
 	m_pMeshMngr = nullptr;
 	//it is not the job of the entity to release the model, 
 	//it is for the mesh manager to do so.
-	m_pModel = nullptr;
+	//m_pModel = nullptr;
 	if (m_DimensionArray)
 	{
 		delete[] m_DimensionArray;
 		m_DimensionArray = nullptr;
 	}
 	SafeDelete(m_pRigidBody);
-	SafeDelete(m_pSolver);
 	m_IDMap.erase(m_sUniqueID);
 }
 //The big 3
-Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
+//Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
+Simplex::MyEntity::MyEntity(vector3 bounds, String a_sUniqueID)
 {
 	Init();
-	m_pModel = new Model();
+	
+	// this will no longer work. Lets have a different way to specify how big this object is
+	/* m_pModel = new Model();
 	m_pModel->Load(a_sFileName);
 	//if the model is loaded
 	if (m_pModel->GetName() != "")
@@ -115,34 +99,30 @@ Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
 		m_sUniqueID = a_sUniqueID;
 		m_IDMap[a_sUniqueID] = this;
 		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
+
 		m_bInMemory = true; //mark this entity as viable
 	}
-	m_pSolver = new MySolver();
+	m_pSolver = new MySolver();*/
+
+	GenUniqueID(a_sUniqueID);
+	m_sUniqueID = a_sUniqueID;
+	m_IDMap[a_sUniqueID] = this;
+	m_pRigidBody = new MyRigidBody(std::vector<vector3>({ bounds, -bounds }));
+	m_bInMemory = true; // no clue what this actually does
 }
 Simplex::MyEntity::MyEntity(MyEntity const& other)
 {
 	m_bInMemory = other.m_bInMemory;
-	m_pModel = other.m_pModel;
+	//m_pModel = other.m_pModel;
 	//generate a new rigid body we do not share the same rigid body as we do the model
-	m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); 
+	//m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList());
+	m_pRigidBody = other.m_pRigidBody;
 	m_m4ToWorld = other.m_m4ToWorld;
 	m_pMeshMngr = other.m_pMeshMngr;
 	m_sUniqueID = other.m_sUniqueID;
 	m_bSetAxis = other.m_bSetAxis;
 	m_nDimensionCount = other.m_nDimensionCount;
 	m_DimensionArray = other.m_DimensionArray;
-	m_pSolver = new MySolver(*other.m_pSolver);
-}
-MyEntity& Simplex::MyEntity::operator=(MyEntity const& other)
-{
-	if(this != &other)
-	{
-		Release();
-		Init();
-		MyEntity temp(other);
-		Swap(temp);
-	}
-	return *this;
 }
 MyEntity::~MyEntity(){Release();}
 //--- Methods
@@ -153,7 +133,9 @@ void Simplex::MyEntity::AddToRenderList(bool a_bDrawRigidBody)
 		return;
 
 	//draw model
-	m_pModel->AddToRenderList();
+	if (m_pModel) {
+		m_pModel->AddToRenderList();
+	}
 	
 	//draw rigid body
 	if(a_bDrawRigidBody)
@@ -302,24 +284,9 @@ void Simplex::MyEntity::SortDimensions(void)
 }
 void Simplex::MyEntity::ApplyForce(vector3 a_v3Force)
 {
-	m_pSolver->ApplyForce(a_v3Force);
+
 }
 void Simplex::MyEntity::Update(void)
 {
-	if (m_bUsePhysicsSolver)
-	{
-		m_pSolver->Update();
-		SetModelMatrix(glm::translate(m_pSolver->GetPosition()) * glm::scale(m_pSolver->GetSize()));
-	}
-}
-void Simplex::MyEntity::ResolveCollision(MyEntity* a_pOther)
-{
-	if (m_bUsePhysicsSolver)
-	{
-		m_pSolver->ResolveCollision(a_pOther->GetSolver());
-	}
-}
-void Simplex::MyEntity::UsePhysicsSolver(bool a_bUse)
-{
-	m_bUsePhysicsSolver = a_bUse;
+	SetModelMatrix(glm::translate(m_v3Position) * glm::scale(m_v3Size));
 }

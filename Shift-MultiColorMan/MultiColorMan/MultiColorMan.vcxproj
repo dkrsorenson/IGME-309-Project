@@ -14,13 +14,13 @@
     <ProjectGuid>{58CB6636-1057-466F-AB91-BADB3395421A}</ProjectGuid>
     <RootNamespace>C22_Physics</RootNamespace>
     <ProjectName>MultiColorMan</ProjectName>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -107,10 +107,9 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClCompile Include="AppClassMain.cpp" />
     <ClCompile Include="ControllerConfiguration.cpp" />
     <ClCompile Include="MyEntity.cpp" />
-    <ClCompile Include="MyEntityManager.cpp" />
+    <ClCompile Include="MyEntityGroup.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MyRigidBody.cpp" />
-    <ClCompile Include="MySolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\imgui\imconfig.h" />
@@ -122,10 +121,9 @@ xcopy "$(SolutionDir)include\Simplex\Shaders" "$(SolutionDir)_Binary\Shaders" /y
     <ClInclude Include="ControllerConfiguration.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="MyEntity.h" />
-    <ClInclude Include="MyEntityManager.h" />
+    <ClInclude Include="MyEntityGroup.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MyRigidBody.h" />
-    <ClInclude Include="MySolver.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\res\BTO.rc" />

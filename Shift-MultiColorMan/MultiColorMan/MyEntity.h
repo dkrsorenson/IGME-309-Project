@@ -5,7 +5,7 @@ Date: 11/2019
 #ifndef __MYENTITY_H_
 #define __MYENTITY_H_
 
-#include "MySolver.h"
+#include "MyRigidBody.h"
 
 namespace Simplex
 {
@@ -13,6 +13,7 @@ namespace Simplex
 //System Class
 class MyEntity
 {
+protected:
 	bool m_bInMemory = false; //loaded flag
 	bool m_bSetAxis = false; //render axis flag
 	String m_sUniqueID = ""; //Unique identifier name
@@ -28,9 +29,11 @@ class MyEntity
 
 	static std::map<String, MyEntity*> m_IDMap; //a map of the unique ID's
 
-	bool m_bUsePhysicsSolver = false; //Indicates if we will use a physics solver 
-
-	MySolver* m_pSolver = nullptr; //Physics MySolver
+	vector3 m_v3Acceleration = ZERO_V3; //Acceleration of the MySolver
+	vector3 m_v3Position = ZERO_V3; //Position of the MySolver
+	vector3 m_v3Size = vector3(1.0f); //Size of the MySolver
+	vector3 m_v3Velocity = ZERO_V3; //Velocity of the MySolver
+	float m_fMass = 1.0f;
 
 public:
 	/*
@@ -40,7 +43,8 @@ public:
 	-	String a_sUniqueID -> Name wanted as identifier, if not available will generate one
 	Output: class object instance
 	*/
-	MyEntity(String a_sFileName, String a_sUniqueID = "NA");
+	//MyEntity(String a_sFileName, String a_sUniqueID = "NA");
+	MyEntity(vector3 bounds, String a_sUniqueID = "NA");
 	/*
 	Usage: Copy Constructor
 	Arguments: class object to copy
@@ -64,49 +68,45 @@ public:
 	Arguments: other -> object to swap content from
 	Output: ---
 	*/
-	void Swap(MyEntity& other);
-	/*
-	USAGE: Gets the model matrix associated with this entity
-	ARGUMENTS: ---
-	OUTPUT: model to world matrix
-	*/
-	matrix4 GetModelMatrix(void);
+	virtual matrix4 GetModelMatrix(void);
 	/*
 	USAGE: Sets the model matrix associated with this entity
 	ARGUMENTS: matrix4 a_m4ToWorld -> model matrix to set
 	OUTPUT: ---
 	*/
-	void SetModelMatrix(matrix4 a_m4ToWorld);
+	virtual void SetModelMatrix(matrix4 a_m4ToWorld);
 	/*
 	USAGE: Gets the model associated with this entity
 	ARGUMENTS: ---
 	OUTPUT: Model
 	*/
-	Model* GetModel(void);
+	//Model* GetModel(void);
 	/*
 	USAGE: Gets the Rigid Body associated with this entity
 	ARGUMENTS: ---
 	OUTPUT: Rigid Body
 	*/
-	MyRigidBody* GetRigidBody(void);
+	virtual MyRigidBody* GetRigidBody(void);
 	/*
 	USAGE: Will reply to the question, is the MyEntity Initialized?
 	ARGUMENTS: ---
 	OUTPUT: initialized?
 	*/
-	bool IsInitialized(void);
+	void SetModel(Model* model);
+
+	virtual bool IsInitialized(void);
 	/*
 	USAGE: Adds the entity to the render list
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void AddToRenderList(bool a_bDrawRigidBody = false);
+	virtual void AddToRenderList(bool a_bDrawRigidBody = false);
 	/*
 	USAGE: Tells if this entity is colliding with the incoming one
 	ARGUMENTS: MyEntity* const other -> inspected entity
 	OUTPUT: are they colliding?
 	*/
-	bool IsColliding(MyEntity* const other);
+	virtual bool IsColliding(MyEntity* const other);
 	/*
 	USAGE: Gets the MyEntity specified by unique ID, nullptr if not exists
 	ARGUMENTS: String a_sUniqueID -> unique ID if the queried entity
@@ -130,143 +130,143 @@ public:
 	ARGUMENTS: bool a_bSetAxis = true -> axis visible?
 	OUTPUT: ---
 	*/
-	void SetAxisVisible(bool a_bSetAxis = true);
+	virtual void SetAxisVisible(bool a_bSetAxis = true);
 	/*
 	USAGE: Will set a dimension to the MyEntity
 	ARGUMENTS: uint a_uDimension -> dimension to set
 	OUTPUT: ---
 	*/
-	void AddDimension(uint a_uDimension);
+	virtual void AddDimension(uint a_uDimension);
 	/*
 	USAGE: Will remove the entity from the specified dimension
 	ARGUMENTS: uint a_uDimension -> dimension to remove
 	OUTPUT: ---
 	*/
-	void RemoveDimension(uint a_uDimension);
+	virtual void RemoveDimension(uint a_uDimension);
 	/*
 	USAGE: will remove all dimensions from entity
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void ClearDimensionSet(void);
+	virtual void ClearDimensionSet(void);
 	/*
 	USAGE: Will ask if the MyEntity is located in a particular dimension
 	ARGUMENTS: uint a_uDimension -> dimension queried
 	OUTPUT: result
 	*/
-	bool IsInDimension(uint a_uDimension);
+	virtual bool IsInDimension(uint a_uDimension);
 	/*
 	USAGE: Asks if this entity shares a dimension with the incoming one
 	ARGUMENTS: MyEntity* const a_pOther -> queried entity
 	OUTPUT: shares at least one dimension?
 	*/
-	bool SharesDimension(MyEntity* const a_pOther);
+	virtual bool SharesDimension(MyEntity* const a_pOther);
 
 	/*
 	USAGE: Clears the collision list of this entity
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void ClearCollisionList(void);
+	virtual void ClearCollisionList(void);
 
 	/*
 	USAGE: Will sort the array of dimensions
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void SortDimensions(void);
+	virtual void SortDimensions(void);
 
 	/*
 	USAGE: Gets the array of rigid bodies pointer this one is colliding with
 	ARGUMENTS: ---
 	OUTPUT: list of colliding rigid bodies
 	*/
-	MyRigidBody::PRigidBody* GetColliderArray(void);
+	virtual MyRigidBody::PRigidBody* GetColliderArray(void);
 	
 	/*
 	USAGE: Returns the number of objects colliding with this one
 	ARGUMENTS: ---
 	OUTPUT: colliding count
 	*/
-	uint GetCollidingCount(void);
+	virtual uint GetCollidingCount(void);
 
 	/*
 	USAGE: Asks this MyEntity if this is the rigid body that belogs to it
 	ARGUMENTS: MyRigidBody* a_pRigidBody -> Queried Rigid Body
 	OUTPUT: is this your rigid body?
 	*/
-	bool HasThisRigidBody(MyRigidBody* a_pRigidBody);
+	virtual bool HasThisRigidBody(MyRigidBody* a_pRigidBody);
 
 	/*
 	USAGE: Asks the entity to resolve the collision with the incoming one
 	ARGUMENTS: MyEntity* a_pOther -> Queried entity
 	OUTPUT: ---
 	*/
-	void ResolveCollision(MyEntity* a_pOther);
+	//virtual void ResolveCollision(MyEntity* a_pOther);
 
 	/*
 	USAGE: Gets the solver applied to this MyEntity
 	ARGUMENTS: ---
 	OUTPUT: MySolver applied
 	*/
-	MySolver* GetSolver(void);
+	//virtual MySolver* GetSolver(void);
 	/*
 	USAGE: Applies a force to the solver
 	ARGUMENTS: vector3 a_v3Force -> force to apply
 	OUTPUT: ---
 	*/
-	void ApplyForce(vector3 a_v3Force);
+	virtual void ApplyForce(vector3 a_v3Force);
 	/*
 	USAGE: Sets the position of the solver
 	ARGUMENTS: vector3 a_v3Position -> position to set
 	OUTPUT: ---
 	*/
-	void SetPosition(vector3 a_v3Position);
+	virtual void SetPosition(vector3 a_v3Position);
 	/*
 	USAGE: Gets the position of the solver
 	ARGUMENTS: ---
 	OUTPUT: position of the solver
 	*/
-	vector3 GetPosition(void);
+	virtual vector3 GetPosition(void);
 
 	/*
 	USAGE: Sets the velocity of the solver
 	ARGUMENTS: vector3 a_v3Velocity -> velocity to set
 	OUTPUT: ---
 	*/
-	void SetVelocity(vector3 a_v3Velocity);
+	virtual void SetVelocity(vector3 a_v3Velocity);
 	/*
 	USAGE: Gets the velocity of the solver
 	ARGUMENTS: ---
 	OUTPUT: velocity of the solver
 	*/
-	vector3 GetVelocity(void);
+	virtual vector3 GetVelocity(void);
 
 	/*
 	USAGE: Sets the mass of the solver
 	ARGUMENTS: float a_fMass -> mass to set
 	OUTPUT: ---
 	*/
-	void SetMass(float a_fMass);
+	virtual void SetMass(float a_fMass);
 	/*
 	USAGE: Gets mass of the solver
 	ARGUMENTS: ---
 	OUTPUT: mass of the object
 	*/
-	float GetMass(void);
+	virtual float GetMass(void);
 
 	/*
 	USAGE: Updates the MyEntity
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void Update(void);
+	virtual void Update(void);
 	/*
 	USAGE: Resolves using physics solver or not in the update
 	ARGUMENTS: bool a_bUse = true -> using physics solver?
 	OUTPUT: ---
 	*/
-	void UsePhysicsSolver(bool a_bUse = true);
+	//virtual void UsePhysicsSolver(bool a_bUse = true);
 
 private:
 	/*

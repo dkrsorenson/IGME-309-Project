@@ -10,14 +10,13 @@ Date: 11/2019
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
 
-#include "MyEntityManager.h"
+#include "MyEntityGroup.h"
 
 namespace Simplex
 {
 //Adding Application to the Simplex namespace
 class Application
 {
-	MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
 private:
 	String m_sProgrammer = "Name Pending - Dakota, Sonya, David, Matt"; //programmer
 
@@ -55,6 +54,11 @@ private:
 	sf::SoundBuffer m_soundBuffer; //buffer to play sound from
 	sf::Sound m_sound; //sound effect
 	sf::Music m_soundBGM; //background music
+
+	MyEntityGroup* level1;
+	MyEntity* player;
+	Model* steve;
+	Model* cube;
 
 public:
 #pragma region Constructor / Run / Destructor
