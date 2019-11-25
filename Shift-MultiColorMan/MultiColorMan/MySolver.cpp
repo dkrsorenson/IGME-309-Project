@@ -53,6 +53,12 @@ vector3 MySolver::GetVelocity(void) { return m_v3Velocity; }
 void MySolver::SetMass(float a_fMass) { m_fMass = a_fMass; }
 float MySolver::GetMass(void) { return m_fMass; }
 
+void Simplex::MySolver::SetIsCollidingMinX(bool a_isCollidingMinX) { isCollidingMinX = a_isCollidingMinX; }
+bool Simplex::MySolver::GetIsCollidingMinX(void){ return isCollidingMinX; }
+
+void Simplex::MySolver::SetIsCollidingMaxX(bool a_isCollidingMaxX) { isCollidingMaxX = a_isCollidingMaxX; }
+bool Simplex::MySolver::GetIsCollidingMaxX(void) { return isCollidingMaxX; }
+
 void MySolver::SetIsGrounded(bool a_isGrounded) { isGrounded = a_isGrounded; }
 bool MySolver::GetIsGrounded(void) { return isGrounded; }
 
@@ -107,12 +113,12 @@ void MySolver::Update(void)
 
 	m_v3Position += m_v3Velocity;
 			
-	if (m_v3Position.y <= 0)
-	{
-		m_v3Position.y = 0;
-		m_v3Velocity.y = 0;
-		SetIsGrounded(true);
-	}
+	//if (m_v3Position.y <= 0)
+	//{
+	//	m_v3Position.y = 0;
+	//	m_v3Velocity.y = 0;
+	//	SetIsGrounded(true);
+	//}
 
 	m_v3Acceleration = ZERO_V3;
 }
@@ -121,6 +127,9 @@ void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 	vector3 accelLimiter = vector3(1.0f);
 	vector3 velocityLimiter = vector3(1.0f);
 
+	SetIsCollidingMaxX(false);
+	SetIsCollidingMinX(false);
+
 	//Depending on which plane of this is colliding with other
 	//we will 0 out the accel and velocity of that direction
 	switch (collidingPlane)
@@ -128,17 +137,25 @@ void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 	//ex: if the right side of this is colliding with the other object,
 	case eContactPlane::MAX_X:
 		//if the object has positive x accel or velocity
-		if (m_v3Acceleration.x > 0)
-			//set it to 0
-			accelLimiter.x = 0;
-		if (m_v3Velocity.x > 0)
-			velocityLimiter.x = 0;
+		//if (m_v3Acceleration.x > 0)
+		//	//set it to 0
+		//	accelLimiter.x = 0;
+		//if (m_v3Velocity.x > 0)
+		//	velocityLimiter.x = 0;
+		///if (m_v3Position.x + m_v3Size.x >+ a_pOther->m_v3Position.x) {
+		//}
+		m_v3Position.x = a_pOther->m_v3Position.x - m_v3Size.x / 2;
+		SetIsCollidingMaxX(true);
 		break;
 	case eContactPlane::MIN_X:
-		if (m_v3Acceleration.x < 0)
-			accelLimiter.x = 0;
-		if (m_v3Velocity.x < 0)
-			velocityLimiter.x = 0;
+		//if (m_v3Acceleration.x < 0)
+		//	accelLimiter.x = 0;
+		//if (m_v3Velocity.x < 0)
+		//	velocityLimiter.x = 0;
+		//if (m_v3Position.x <= a_pOther->m_v3Position.x + a_pOther->m_v3Size.x) {
+		//}
+		m_v3Position.x = a_pOther->m_v3Position.x + a_pOther->m_v3Size.x + m_v3Size.x / 2;
+		SetIsCollidingMinX(true);
 		break;
 	case eContactPlane::MAX_Y:
 		if (m_v3Acceleration.y > 0)

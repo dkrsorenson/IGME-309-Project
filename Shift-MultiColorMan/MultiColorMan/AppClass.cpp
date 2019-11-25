@@ -17,9 +17,9 @@ void Application::InitVariables(void)
 
 	//Array of the x-value of Platform Locations
 	float xPlatPos[25] = {
-		-6.0f,-8.0f,-10.0f,-12.0f,
+		/*-6.0f,*/-8.0f,-10.0f,-12.0f,
 		0, 2.0f, 4.0f, 6.0f, 
-		12.0f, 14.0f, 16.0f, 18.0f, 20.0f,
+		/*12.0f, */14.0f, 16.0f, 18.0f, 20.0f,
 		24.0f, 26.0f, 28.0f,
 		34.0f, 36.0f, 38.0f,
 		44.0f, 48.0f, 50.0f,
@@ -47,7 +47,21 @@ void Application::InitVariables(void)
 		v3Position.y = 0;
 		matrix4 m4Position = glm::translate(v3Position);
 		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
-		m_pEntityMngr->UsePhysicsSolver();
+		//m_pEntityMngr->UsePhysicsSolver();
+	}
+
+
+	static float nextXPos = -30.0f;
+	for (int i = 0; i < 100; i++)
+	{
+		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i));
+		vector3 v3Position = vector3(nextXPos, -2.0f, 
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().z -
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
+		matrix4 m4Position = glm::translate(v3Position);
+		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
+
+		nextXPos += 2.0f;
 	}
 }
 

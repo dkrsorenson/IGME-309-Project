@@ -425,11 +425,17 @@ void Application::ProcessKeyboard(void)
 	float fDelta = m_pSystem->GetDeltaTime(0);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
+		//bool isCollidingMinX = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->GetIsCollidingMinX();
+		//if (!isCollidingMinX) {
+		//
 		m_pEntityMngr->ApplyForce(vector3(-1.0f * fDelta, 0.0f, 0.0f), "Steve");
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
+		//bool isCollidingMaxX = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->GetIsCollidingMaxX();
+		//if (!isCollidingMaxX) {
+		//}
 		m_pEntityMngr->ApplyForce(vector3(1.0f * fDelta, 0.0f, 0.0f), "Steve");
 	}
 

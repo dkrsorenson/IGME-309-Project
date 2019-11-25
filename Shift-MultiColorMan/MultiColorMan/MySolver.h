@@ -18,6 +18,8 @@ class MySolver
 	vector3 m_v3Velocity = ZERO_V3; //Velocity of the MySolver
 	float m_fMass = 1.0f; //Mass of the solver
 	bool isGrounded = false; // If the entity is grounded or not
+	bool isCollidingMinX = false;
+	bool isCollidingMaxX = false;
 	const vector3 m_fGravity = vector3(0.0f, -0.035f, 0.0f);
 public:
 	/*
@@ -101,6 +103,30 @@ public:
 	OUTPUT: mass of the object
 	*/
 	float GetMass(void);
+	/*
+	USAGE: Sets whether or not the solver is colliding on the min x
+	ARGUMENTS: If the solver is colliding on the min x
+	OUTPUT: ---
+	*/
+	void SetIsCollidingMinX(bool a_isCollidingMinX);
+	/*
+	USAGE: Gets whether or not the solver is colliding on the min x
+	ARGUMENTS: ---
+	OUTPUT: If the solver is colliding on the min x
+	*/
+	bool GetIsCollidingMinX(void);
+	/*
+	USAGE: Sets whether or not the solver is colliding on the max x
+	ARGUMENTS: If the solver is colliding on the max x
+	OUTPUT: ---
+	*/
+	void SetIsCollidingMaxX(bool a_isCollidingMaxX);
+	/*
+	USAGE: Gets whether or not the solver is colliding on the max x
+	ARGUMENTS: ---
+	OUTPUT: If the solver is colliding on the max x
+	*/
+	bool GetIsCollidingMaxX(void);
 	/*
 	USAGE: Sets whether or not the solver is grounded
 	ARGUMENTS: If the solver is grounded
