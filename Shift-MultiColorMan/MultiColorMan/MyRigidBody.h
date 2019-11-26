@@ -9,7 +9,26 @@ Date: 11/2019
 
 namespace Simplex
 {
+enum eContactPlane
+{
+	//No contact made
+	NONE = 0,
 
+	//Right Side of this is colliding with other object
+	MAX_X = 1,
+	//Left side of this is colliding with other object
+	MIN_X = 2,
+
+	//Top of this is colliding with other object 
+	MAX_Y = 3,
+	//Bottom of this is colliding with other object 
+	MIN_Y = 4,
+
+	//Front of this is colliding with other object
+	MAX_Z = 5,
+	//Back of this is colliding with other object
+	MIN_Z = 6,
+};
 //System Class
 class MyRigidBody
 {
@@ -111,6 +130,14 @@ public:
 	OUTPUT: are they colliding?
 	*/
 	bool IsColliding(MyRigidBody* const other);
+
+	/*
+	USAGE: Tells which plane is in contact
+	ARGUMENTS: MyRigidBody* const other -> inspected rigid body
+	OUTPUT: integer (enum) representing the plane of contact
+		*/
+	uint MyRigidBody::GetCollidingPlane(MyRigidBody* const other);
+
 #pragma region Accessors
 	/*
 	Usage: Gets visibility of bounding sphere

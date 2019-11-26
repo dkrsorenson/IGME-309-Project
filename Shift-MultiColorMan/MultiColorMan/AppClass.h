@@ -11,6 +11,7 @@ Date: 11/2019
 #include "imgui\ImGuiObject.h"
 
 #include "MyEntityGroup.h"
+#include "PlayerSolver.h"
 
 namespace Simplex
 {
@@ -59,6 +60,8 @@ private:
 	MyEntity* player;
 	Model* steve;
 	Model* cube;
+
+	PlayerSolver* platform_physics;
 
 public:
 #pragma region Constructor / Run / Destructor

@@ -303,11 +303,6 @@ bool MyRigidBody::IsColliding(MyRigidBody* const other)
 		if (this->m_v3MinG.y > other->m_v3MaxG.y) //this above of other
 			bColliding = false;
 
-		if (this->m_v3MaxG.z < other->m_v3MinG.z) //this behind of other
-			bColliding = false;
-		if (this->m_v3MinG.z > other->m_v3MaxG.z) //this in front of other
-			bColliding = false;
-
 		if (bColliding) //they are colliding with bounding box also
 		{
 			this->AddCollisionWith(other);
@@ -325,6 +320,30 @@ bool MyRigidBody::IsColliding(MyRigidBody* const other)
 		other->RemoveCollisionWith(this);
 	}
 	return bColliding;
+}
+
+uint MyRigidBody::GetCollidingPlane(MyRigidBody* const other)
+{
+	if (this->IsColliding(other) == false)
+		return eContactPlane::NONE;
+
+	float collisionPenetration[7];
+
+	collisionPenetration[eContactPlane::MAX_X] = fabs(this->m_v3MaxG.x - other->m_v3MinG.x);
+	collisionPenetration[eContactPlane::MIN_X] = fabs(this->m_v3MinG.x - other->m_v3MaxG.x);
+
+	collisionPenetration[eContactPlane::MAX_Y] = fabs(this->m_v3MaxG.y - other->m_v3MinG.y);
+	collisionPenetration[eContactPlane::MIN_Y] = fabs(this->m_v3MinG.y - other->m_v3MaxG.y);
+
+	collisionPenetration[eContactPlane::MAX_Z] = fabs(this->m_v3MaxG.z - other->m_v3MinG.z);
+	collisionPenetration[eContactPlane::MIN_Z] = fabs(this->m_v3MinG.z - other->m_v3MaxG.z);
+
+	uint minIndex = eContactPlane::MAX_X;
+	for (uint i = eContactPlane::MIN_X; i < eContactPlane::MIN_Z; i++)
+		if (collisionPenetration[i] < collisionPenetration[minIndex])
+			minIndex = i;
+
+	return minIndex;
 }
 
 void MyRigidBody::AddToRenderList(void)

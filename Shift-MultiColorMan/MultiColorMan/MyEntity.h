@@ -52,12 +52,6 @@ public:
 	*/
 	MyEntity(MyEntity const& other);
 	/*
-	Usage: Copy Assignment Operator
-	Arguments: class object to copy
-	Output: ---
-	*/
-	MyEntity& operator=(MyEntity const& other);
-	/*
 	Usage: Destructor
 	Arguments: ---
 	Output: ---
@@ -198,19 +192,6 @@ public:
 	virtual bool HasThisRigidBody(MyRigidBody* a_pRigidBody);
 
 	/*
-	USAGE: Asks the entity to resolve the collision with the incoming one
-	ARGUMENTS: MyEntity* a_pOther -> Queried entity
-	OUTPUT: ---
-	*/
-	//virtual void ResolveCollision(MyEntity* a_pOther);
-
-	/*
-	USAGE: Gets the solver applied to this MyEntity
-	ARGUMENTS: ---
-	OUTPUT: MySolver applied
-	*/
-	//virtual MySolver* GetSolver(void);
-	/*
 	USAGE: Applies a force to the solver
 	ARGUMENTS: vector3 a_v3Force -> force to apply
 	OUTPUT: ---
@@ -266,7 +247,16 @@ public:
 	ARGUMENTS: bool a_bUse = true -> using physics solver?
 	OUTPUT: ---
 	*/
-	//virtual void UsePhysicsSolver(bool a_bUse = true);
+	virtual vector3 GetAcceleration(void);
+
+
+	virtual vector3 GetSize(void);
+
+
+	virtual void SetAcceleration(vector3 accel);
+
+
+	virtual void SetSize(vector3 size);
 
 private:
 	/*

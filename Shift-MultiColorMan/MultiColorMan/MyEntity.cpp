@@ -36,13 +36,15 @@ void Simplex::MyEntity::SetPosition(vector3 a_v3Position) {
 }
 Simplex::vector3 Simplex::MyEntity::GetPosition(void)
 {
-	return vector3();
+	return m_v3Position;
 }
 
-void Simplex::MyEntity::SetVelocity(vector3 a_v3Velocity) {  }
+void Simplex::MyEntity::SetVelocity(vector3 a_v3Velocity) { 
+	this->m_v3Velocity = a_v3Velocity;
+}
 Simplex::vector3 Simplex::MyEntity::GetVelocity(void)
 {
-	return vector3();
+	return m_v3Velocity;
 }
 
 void Simplex::MyEntity::SetMass(float a_fMass) {  }
@@ -57,7 +59,6 @@ void Simplex::MyEntity::Init(void)
 	m_bInMemory = true; // we aren't starting with a rigid body anymore
 	                    // so loaded by default?
 	m_bSetAxis = false;
-	//m_pModel = nullptr;
 	m_pRigidBody = nullptr;
 	m_DimensionArray = nullptr;
 	m_m4ToWorld = IDENTITY_M4;
@@ -88,21 +89,6 @@ void Simplex::MyEntity::Release(void)
 Simplex::MyEntity::MyEntity(vector3 bounds, String a_sUniqueID)
 {
 	Init();
-	
-	// this will no longer work. Lets have a different way to specify how big this object is
-	/* m_pModel = new Model();
-	m_pModel->Load(a_sFileName);
-	//if the model is loaded
-	if (m_pModel->GetName() != "")
-	{
-		GenUniqueID(a_sUniqueID);
-		m_sUniqueID = a_sUniqueID;
-		m_IDMap[a_sUniqueID] = this;
-		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
-
-		m_bInMemory = true; //mark this entity as viable
-	}
-	m_pSolver = new MySolver();*/
 
 	GenUniqueID(a_sUniqueID);
 	m_sUniqueID = a_sUniqueID;
@@ -113,9 +99,6 @@ Simplex::MyEntity::MyEntity(vector3 bounds, String a_sUniqueID)
 Simplex::MyEntity::MyEntity(MyEntity const& other)
 {
 	m_bInMemory = other.m_bInMemory;
-	//m_pModel = other.m_pModel;
-	//generate a new rigid body we do not share the same rigid body as we do the model
-	//m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList());
 	m_pRigidBody = other.m_pRigidBody;
 	m_m4ToWorld = other.m_m4ToWorld;
 	m_pMeshMngr = other.m_pMeshMngr;
@@ -284,9 +267,35 @@ void Simplex::MyEntity::SortDimensions(void)
 }
 void Simplex::MyEntity::ApplyForce(vector3 a_v3Force)
 {
+	if (m_fMass < 0.01f)
+		m_fMass = 0.01f;
 
+	m_v3Acceleration += a_v3Force / m_fMass;
 }
 void Simplex::MyEntity::Update(void)
 {
+	m_v3Velocity += m_v3Acceleration;
+	m_v3Position += m_v3Velocity;
+
 	SetModelMatrix(glm::translate(m_v3Position) * glm::scale(m_v3Size));
+}
+
+vector3 Simplex::MyEntity::GetAcceleration(void)
+{
+	return m_v3Acceleration;
+}
+
+vector3 Simplex::MyEntity::GetSize(void)
+{
+	return m_v3Size;
+}
+
+void Simplex::MyEntity::SetAcceleration(vector3 accel)
+{
+	m_v3Acceleration = accel;
+}
+
+void Simplex::MyEntity::SetSize(vector3 size)
+{
+	m_v3Size = size;
 }
