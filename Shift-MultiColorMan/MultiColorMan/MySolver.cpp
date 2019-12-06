@@ -168,16 +168,14 @@ void MySolver::ResolveCollision(MySolver* a_pOther, uint collidingPlane)
 		//a force opposite to gravity must be applied to prevent sinking into the block
 		//ApplyForce(-m_fGravity);
 		////and proceed as usual
-		//if (m_v3Acceleration.y < 0)
-		//	accelLimiter.y = 0;
-		//if (m_v3Velocity.y < 0)
-		//	velocityLimiter.y = 0;
-		if (m_v3Position.y <= a_pOther->m_v3Position.y + a_pOther->GetSize().y)
-		{
-			m_v3Position.y = a_pOther->m_v3Position.y + a_pOther->GetSize().y;
-			m_v3Velocity.y = 0;
-			SetIsGrounded(true);
-		}
+		if (m_v3Acceleration.y < 0)
+			accelLimiter.y = 0;
+		if (m_v3Velocity.y < 0)
+			velocityLimiter.y = 0;
+		m_v3Position.y = a_pOther->m_v3Position.y + a_pOther->GetSize().y;
+		m_v3Velocity.y = 0;
+		SetIsGrounded(true);
+
 
 		// Set is grounded if he's not already grounded
 		//if (isGrounded == false) SetIsGrounded(true);
