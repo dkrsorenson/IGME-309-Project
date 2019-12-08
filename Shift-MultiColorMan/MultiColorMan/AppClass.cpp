@@ -9,14 +9,14 @@ void Application::InitVariables(void)
 	steveTempPosition = vector3(-100, -100, 0);
 
 	// Add blue steve
-	m_pEntityMngr->AddEntity("Minecraft\\BlueSteve.obj", "BlueSteve");
+	m_pEntityMngr->AddEntity("Minecraft\\BlueSteve.obj", "BlueSteve", eColor::BLUE);
 	vector3 v3Position = vector3(-2, 0, 0);
 	matrix4 m4Position = glm::translate(v3Position);
 	m_pEntityMngr->SetModelMatrix(m4Position);
 	m_pEntityMngr->UsePhysicsSolver();
 
 	// Add red steve
-	m_pEntityMngr->AddEntity("Minecraft\\RedSteve.obj", "RedSteve");
+	m_pEntityMngr->AddEntity("Minecraft\\RedSteve.obj", "RedSteve", eColor::RED);
 	v3Position = steveTempPosition;
 	m4Position = glm::translate(v3Position);
 	m_pEntityMngr->SetModelMatrix(m4Position);

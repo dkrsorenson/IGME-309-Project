@@ -83,14 +83,9 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 
 		break;
 	}
-	case sf::Keyboard::D:
-	case sf::Keyboard::Right:
-		if (!colorSwitchable)
-		{
-			m_pEntityMngr->SwitchColor("Steve");
-			colorSwitchable = true;
-		}
-	case sf::Keyboard::LShift:
+	//case sf::Keyboard::D:
+	//case sf::Keyboard::Right:
+	//case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = true;
 		break;
@@ -115,7 +110,6 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 			m4Position = glm::translate(currentStevePosition);
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
 
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetIsBlue(false);
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetIsGrounded(isGrounded);
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetVelocity(velocity);
 		}
@@ -127,7 +121,6 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 
 			m4Position = glm::translate(currentStevePosition);
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetIsBlue(true);
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetIsGrounded(isGrounded);
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetVelocity(velocity);
 		}
@@ -179,7 +172,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 		m_bModifier = false;
 	case sf::Keyboard::D:
 	case sf::Keyboard::Right:
-		colorSwitchable = false;
+		currentlySwitching = false;
 	}
 
 	//gui
