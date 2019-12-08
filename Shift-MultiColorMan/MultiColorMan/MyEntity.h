@@ -40,6 +40,7 @@ class MyEntity
 
 	MySolver* m_pSolver = nullptr; //Physics MySolver
 
+	bool m_bIsBlue = true;
 public:
 	/*
 	Usage: Constructor that specifies the name attached to the MyEntity
@@ -296,6 +297,18 @@ public:
 	OUTPUT: ---
 	*/
 	void UsePhysicsSolver(bool a_bUse = true);
+	/*
+	USAGE: Gets whether steve is blue or red
+	ARGUMENTS: ---
+	OUTPUT: If true, Steve is blue. If false, Steve is red
+	*/
+	bool GetIsBlue ();	
+	/*
+	USAGE: Sets if the model is blue or red
+	ARGUMENTS: bool a_bIsBlue -> Set true if Steve is blue, false if Steve is red.
+	OUTPUT: ---
+	*/
+	void SetIsBlue(bool a_bIsBlue);
 
 private:
 	/*

@@ -5,13 +5,27 @@ void Application::InitVariables(void)
 
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light (0 is reserved for ambient light)
 
-	m_pEntityMngr->AddEntity("Minecraft\\BlueSteve.obj", "Steve", eColor::BLUE);
+	currentSteve = "BlueSteve";
+	steveTempPosition = vector3(-100, -100, 0);
+
+	// Add blue steve
+	m_pEntityMngr->AddEntity("Minecraft\\BlueSteve.obj", "BlueSteve");
+	vector3 v3Position = vector3(-2, 0, 0);
+	matrix4 m4Position = glm::translate(v3Position);
+	m_pEntityMngr->SetModelMatrix(m4Position);
+	m_pEntityMngr->UsePhysicsSolver();
+
+	// Add red steve
+	m_pEntityMngr->AddEntity("Minecraft\\RedSteve.obj", "RedSteve");
+	v3Position = steveTempPosition;
+	m4Position = glm::translate(v3Position);
+	m_pEntityMngr->SetModelMatrix(m4Position);
 	m_pEntityMngr->UsePhysicsSolver();
 
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUpward(
-		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 15.0f), //Position
-		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 5.0f),	//Target
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().x, 4.0f, 15.0f), //Position
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().x, 4.0f, 5.0f),	//Target
 		AXIS_Y);					//Up
 	
 
@@ -41,8 +55,8 @@ void Application::InitVariables(void)
 		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i), eColor::RED);
 		//This puts a cube in every so often. Need to make an array of x and y positions, stick them together and make it look like a platformer.
 		vector3 v3Position = vector3(xPlatPos[i], 0,
-			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().z -
-			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z)));
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetRigidBody()->GetHalfWidth().z)));
 		//Flattens the platform out more
 		v3Position.y = 0;
 		matrix4 m4Position = glm::translate(v3Position);
@@ -56,7 +70,7 @@ void Application::InitVariables(void)
 	{
 		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i), eColor::NEUTRAL);
 		vector3 v3Position = vector3(nextXPos, -2.0f, 
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().z -
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
 			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
 		matrix4 m4Position = glm::translate(v3Position);
 		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
@@ -69,7 +83,7 @@ void Application::InitVariables(void)
 	{
 		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i), eColor::NEUTRAL);
 		vector3 v3Position = vector3(nextXPos, -4.0f, 
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().z -
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
 			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
 		matrix4 m4Position = glm::translate(v3Position);
 		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
@@ -94,8 +108,8 @@ void Application::Update(void)
 	//comment this chunk if camera movement needed during debugging
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUpward(
-		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 15.0f), //Position
-		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetPosition().x, 4.0f, 5.0f),	//Target
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().x, 4.0f, 15.0f), //Position
+		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().x, 4.0f, 5.0f),	//Target
 		AXIS_Y);					//Up
 
 	//Update Entity Manager
