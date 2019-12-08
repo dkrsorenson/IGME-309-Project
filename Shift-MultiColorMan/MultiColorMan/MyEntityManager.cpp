@@ -188,10 +188,10 @@ void Simplex::MyEntityManager::Update(void)
 		m_mEntityArray[i]->Update();
 	}
 }
-void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
+void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID, int color)
 {
 	//Create a temporal entity to store the object
-	MyEntity* pTemp = new MyEntity(a_sFileName, a_sUniqueID);
+	MyEntity* pTemp = new MyEntity(a_sFileName, a_sUniqueID, color);
 	//if I was able to generate it add it to the list
 	if (pTemp->IsInitialized())
 	{
@@ -516,4 +516,14 @@ void Simplex::MyEntityManager::UsePhysicsSolver(bool a_bUse, uint a_uIndex)
 		a_uIndex = m_uEntityCount - 1;
 
 	return m_mEntityArray[a_uIndex]->UsePhysicsSolver(a_bUse);
+}
+
+void Simplex::MyEntityManager::SwitchColor(String a_sUniqueID)
+{
+	//Get the entity
+	MyEntity* pTemp = MyEntity::GetEntity(a_sUniqueID);
+
+	//if the entity does not exists return
+	if (pTemp)
+		pTemp->SwitchColor();
 }

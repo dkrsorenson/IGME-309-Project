@@ -43,7 +43,7 @@ public:
 	-	String a_sUniqueID -> Name wanted as identifier, if not available will generate one
 	OUTPUT: ---
 	*/
-	void AddEntity(String a_sFileName, String a_sUniqueID = "NA");
+	void AddEntity(String a_sFileName, String a_sUniqueID = "NA", int color = eColor::NEUTRAL);
 	/*
 	USAGE: Deletes the MyEntity Specified by unique ID and removes it from the list
 	ARGUMENTS: uint a_uIndex -> index of the queried entry, if < 0 asks for the last one added
@@ -311,6 +311,13 @@ public:
 	OUTPUT: ---
 	*/
 	void UsePhysicsSolver(bool a_bUse = true, uint a_uIndex = -1);
+
+	/*
+	USAGE: changes the color of the object between blue and red
+	ARGUMENTS: ---
+	OUTPUT: ---
+	*/
+	void SwitchColor(String a_sUniqueID);
 private:
 	/*
 	Usage: constructor

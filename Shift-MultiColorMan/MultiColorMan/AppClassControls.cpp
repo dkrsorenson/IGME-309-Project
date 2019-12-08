@@ -84,6 +84,13 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 
 		break;
 	}
+	case sf::Keyboard::D:
+	case sf::Keyboard::Right:
+		if (!colorSwitchable)
+		{
+			m_pEntityMngr->SwitchColor("Steve");
+			colorSwitchable = true;
+		}
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = true;
@@ -132,6 +139,9 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = false;
+	case sf::Keyboard::D:
+	case sf::Keyboard::Right:
+		colorSwitchable = false;
 	}
 
 	//gui
@@ -437,6 +447,7 @@ void Application::ProcessKeyboard(void)
 		//if (!isCollidingMaxX) {
 		//}
 		m_pEntityMngr->ApplyForce(vector3(1.0f * fDelta, 0.0f, 0.0f), "Steve");
+
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))

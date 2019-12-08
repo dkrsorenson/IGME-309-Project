@@ -11,8 +11,16 @@ namespace Simplex
 {
 
 //System Class
+enum eColor
+{
+	NEUTRAL = 0,
+	BLUE = 1,
+	RED = 2
+};
 class MyEntity
 {
+	int color;
+
 	bool m_bInMemory = false; //loaded flag
 	bool m_bSetAxis = false; //render axis flag
 	String m_sUniqueID = ""; //Unique identifier name
@@ -40,7 +48,7 @@ public:
 	-	String a_sUniqueID -> Name wanted as identifier, if not available will generate one
 	Output: class object instance
 	*/
-	MyEntity(String a_sFileName, String a_sUniqueID = "NA");
+	MyEntity(String a_sFileName, String a_sUniqueID = "NA", int color = eColor::NEUTRAL);
 	/*
 	Usage: Copy Constructor
 	Arguments: class object to copy
@@ -254,6 +262,27 @@ public:
 	OUTPUT: mass of the object
 	*/
 	float GetMass(void);
+
+	/*
+	USAGE: Sets the color of the object
+	ARGUMENTS: int isBlue -> color to set
+	OUTPUT: ---
+	*/
+	void SetColor(int isBlue);
+
+	/*
+	USAGE: Gets color of the entity
+	ARGUMENTS: ---
+	OUTPUT: color of the entity - see enum for color mapping
+	*/
+	int GetColor(void);
+
+	/*
+	USAGE: changes the color of the object between blue and red
+	ARGUMENTS: ---
+	OUTPUT: ---
+	*/
+	void SwitchColor();
 
 	/*
 	USAGE: Updates the MyEntity

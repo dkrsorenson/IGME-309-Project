@@ -58,6 +58,16 @@ float Simplex::MyEntity::GetMass(void)
 		return m_pSolver->GetMass();
 	return 1.0f;
 }
+
+void Simplex::MyEntity::SetColor(int a_color)
+{
+	color = a_color;
+}
+
+int Simplex::MyEntity::GetColor(void)
+{
+	return color;
+}
 //  MyEntity
 void Simplex::MyEntity::Init(void)
 {
@@ -103,7 +113,7 @@ void Simplex::MyEntity::Release(void)
 	m_IDMap.erase(m_sUniqueID);
 }
 //The big 3
-Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
+Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID, int a_color)
 {
 	Init();
 	m_pModel = new Model();
@@ -117,6 +127,7 @@ Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
 		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
 		m_bInMemory = true; //mark this entity as viable
 	}
+	color = a_color;
 	m_pSolver = new MySolver();
 }
 Simplex::MyEntity::MyEntity(MyEntity const& other)
@@ -289,8 +300,11 @@ bool Simplex::MyEntity::IsColliding(MyEntity* const other)
 	//they are not colliding
 	if (!SharesDimension(other))
 		return false;
-
-	return m_pRigidBody->IsColliding(other->GetRigidBody());
+	
+	//if the colors match or if either color is neutral, check for collision
+	if (color == other->color || color == eColor::NEUTRAL || other->color == eColor::NEUTRAL)
+		return m_pRigidBody->IsColliding(other->GetRigidBody());
+	return false;
 }
 void Simplex::MyEntity::ClearCollisionList(void)
 {
@@ -303,6 +317,18 @@ void Simplex::MyEntity::SortDimensions(void)
 void Simplex::MyEntity::ApplyForce(vector3 a_v3Force)
 {
 	m_pSolver->ApplyForce(a_v3Force);
+}
+void Simplex::MyEntity::SwitchColor()
+{
+	switch (color)
+	{
+	case eColor::BLUE:
+		color = eColor::RED;
+		break;
+	case eColor::RED:
+		color = eColor::BLUE;
+		break;
+	}
 }
 void Simplex::MyEntity::Update(void)
 {
