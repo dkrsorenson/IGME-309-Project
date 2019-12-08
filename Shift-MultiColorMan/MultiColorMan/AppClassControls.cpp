@@ -75,19 +75,57 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	{
 		m_sound.play();
 
-		bool isGrounded = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->GetIsGrounded();
-		std::cout << isGrounded << std::endl;
+		bool isGrounded = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->GetIsGrounded();
 		if (isGrounded) {
-			m_pEntityMngr->ApplyForce(vector3(0.0f, 1.0f, 0.0f), "Steve");
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->SetIsGrounded(false);
+			m_pEntityMngr->ApplyForce(vector3(0.0f, 1.0f, 0.0f), currentSteve);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetIsGrounded(false);
 		}
 
 		break;
 	}
-	case sf::Keyboard::LShift:
+	//case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = true;
 		break;
+	}
+	
+	if(a_event.key.code == sf::Keyboard::LShift)
+	{
+		if (currentlySwitching) return;
+
+		currentlySwitching = true;
+		vector3 currentStevePosition = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition();
+		bool isGrounded = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->GetIsGrounded();
+		vector3 velocity = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->GetVelocity();
+
+		// Shift colors
+		if (currentSteve == "BlueSteve") {
+			matrix4 m4Position = glm::translate(steveTempPosition);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+
+			currentSteve = "RedSteve";
+
+			m4Position = glm::translate(currentStevePosition);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetIsBlue(false);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetIsGrounded(isGrounded);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetVelocity(velocity);
+		}
+		else if (currentSteve == "RedSteve") {
+			matrix4 m4Position = glm::translate(steveTempPosition);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+
+			currentSteve = "BlueSteve";
+
+			m4Position = glm::translate(currentStevePosition);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetIsBlue(true);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetIsGrounded(isGrounded);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetSolver()->SetVelocity(velocity);
+		}
+
+		currentlySwitching = false;
 	}
 
 	//gui
@@ -428,7 +466,7 @@ void Application::ProcessKeyboard(void)
 		//bool isCollidingMinX = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->GetIsCollidingMinX();
 		//if (!isCollidingMinX) {
 		//
-		m_pEntityMngr->ApplyForce(vector3(-1.0f * fDelta, 0.0f, 0.0f), "Steve");
+		m_pEntityMngr->ApplyForce(vector3(-1.0f * fDelta, 0.0f, 0.0f), currentSteve);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -436,12 +474,7 @@ void Application::ProcessKeyboard(void)
 		//bool isCollidingMaxX = m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Steve"))->GetSolver()->GetIsCollidingMaxX();
 		//if (!isCollidingMaxX) {
 		//}
-		m_pEntityMngr->ApplyForce(vector3(1.0f * fDelta, 0.0f, 0.0f), "Steve");
-	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-	{
-		// Shift colors
+		m_pEntityMngr->ApplyForce(vector3(1.0f * fDelta, 0.0f, 0.0f), currentSteve);
 	}
 
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))

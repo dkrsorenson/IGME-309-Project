@@ -56,6 +56,10 @@ private:
 	sf::Sound m_sound; //sound effect
 	sf::Music m_soundBGM; //background music
 
+	String currentSteve = "BlueSteve";
+	vector3 steveTempPosition;
+	bool currentlySwitching = false;
+
 public:
 #pragma region Constructor / Run / Destructor
 	/*

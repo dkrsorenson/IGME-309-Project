@@ -323,3 +323,21 @@ void Simplex::MyEntity::UsePhysicsSolver(bool a_bUse)
 {
 	m_bUsePhysicsSolver = a_bUse;
 }
+/*
+USAGE: Gets whether steve is blue or red
+ARGUMENTS: ---
+OUTPUT: If true, Steve is blue. If false, Steve is red
+*/
+bool Simplex::MyEntity::GetIsBlue()
+{
+	return m_bIsBlue;
+}
+/*
+USAGE: Sets whether steve is blue or red
+ARGUMENTS: True if Steve is blue, false if Steve is red
+OUTPUT: ---
+*/
+void Simplex::MyEntity::SetIsBlue(bool a_bIsBlue)
+{
+	m_bIsBlue = a_bIsBlue;
+}
