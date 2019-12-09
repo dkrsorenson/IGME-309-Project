@@ -73,11 +73,13 @@ void Simplex::MyEntity::RespawnPlayer(bool respawnR)
 	if (respawnR == true)
 	{
 		//Set player Position to steveStartingPosition. Just hardcoding the value for now.
-		/*
-		matrix4 m4Model = glm::translate(vector3(-20, 0, 0));
+		//for some reason, it is taking all of the red blocks and moving them to this location
+		/*matrix4 m4Model = glm::translate(vector3(-20, 0, 0));
 		m_pModel->SetModelMatrix(m4Model);
-		respawnR = false;*/
+		respawn = false;*/
 	}
+	//If player Falls off map
+
 }
 //  MyEntity
 void Simplex::MyEntity::Init(void)
@@ -321,7 +323,6 @@ bool Simplex::MyEntity::IsColliding(MyEntity* const other)
 		respawn = true;
 		RespawnPlayer(respawn);
 	}
-	
 	return false;
 }
 void Simplex::MyEntity::ClearCollisionList(void)

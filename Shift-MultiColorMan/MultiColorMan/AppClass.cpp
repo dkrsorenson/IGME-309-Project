@@ -138,6 +138,16 @@ void Application::Update(void)
 	//Uncomment for debugging if camera movement needed
 	//CameraRotation();
 
+	//If Steve falls off the map
+	if (m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().y <= -10.0f)
+	{
+		vector3 v3Position = steveStartingPosition;
+		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetPosition(steveStartingPosition);
+		//matrix4 m4Position = glm::translate(v3Position);
+		//m_pEntityMngr->SetModelMatrix(m4Position);
+	}
+
+
 	//comment this chunk if camera movement needed during debugging
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUpward(

@@ -291,7 +291,7 @@ public:
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
-	void RespawnPlayer(bool);
+	void RespawnPlayer(bool respawnR);
 	/*
 	USAGE: Respawns the player to steveStartingPoint
 	ARGUMENTS: ---
