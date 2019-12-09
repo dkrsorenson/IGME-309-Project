@@ -52,7 +52,7 @@ void Application::InitVariables(void)
 
 	for (int i = 0; i < std::size(xPlatPos); i++)
 	{
-		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i), eColor::RED);
+		m_pEntityMngr->AddEntity("Minecraft\\RedCube.obj", "Cube_" + std::to_string(i), eColor::RED);
 		//This puts a cube in every so often. Need to make an array of x and y positions, stick them together and make it look like a platformer.
 		vector3 v3Position = vector3(xPlatPos[i], 0,
 			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
@@ -68,7 +68,7 @@ void Application::InitVariables(void)
 	static float nextXPos = -30.0f;
 	for (int i = 0; i < 100; i++)
 	{
-		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i), eColor::NEUTRAL);
+		m_pEntityMngr->AddEntity("Minecraft\\BlueCube.obj", "Cube_" + std::to_string(i), eColor::BLUE);
 		vector3 v3Position = vector3(nextXPos, -2.0f, 
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
 			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
@@ -81,7 +81,7 @@ void Application::InitVariables(void)
 	nextXPos = -30.0f;
 	for (int i = 0; i < 100; i++)
 	{
-		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i), eColor::NEUTRAL);
+		m_pEntityMngr->AddEntity("Minecraft\\BlueCube.obj", "Cube_" + std::to_string(i), eColor::BLUE);
 		vector3 v3Position = vector3(nextXPos, -4.0f, 
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
 			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
