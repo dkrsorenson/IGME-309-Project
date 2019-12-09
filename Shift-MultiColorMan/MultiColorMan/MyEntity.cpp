@@ -84,6 +84,7 @@ void Simplex::MyEntity::RespawnPlayer(bool respawnR)
 	//If player Falls off map
 
 	currentlyRespawning = false;
+	respawned = true;
 }
 //  MyEntity
 void Simplex::MyEntity::Init(void)
@@ -319,15 +320,6 @@ bool Simplex::MyEntity::IsColliding(MyEntity* const other)
 		return false;
 	
 	return m_pRigidBody->IsColliding(other->GetRigidBody());
-	//if the colors match or if either color is neutral, check for collision
-	//if (color == other->color || color == eColor::NEUTRAL || other->color == eColor::NEUTRAL)
-	////If colors do not match, respawn player
-	//if (color != other->color)
-	//{
-	//	respawn = true;
-	//	RespawnPlayer(respawn);
-	//}
-	//return false;
 }
 void Simplex::MyEntity::ClearCollisionList(void)
 {
@@ -352,6 +344,14 @@ void Simplex::MyEntity::SwitchColor()
 		color = eColor::BLUE;
 		break;
 	}
+}
+bool Simplex::MyEntity::GetIsRespawned(void)
+{
+	return respawned;
+}
+void Simplex::MyEntity::SetIsRespawned(bool a_respawned)
+{
+	respawned = a_respawned;
 }
 void Simplex::MyEntity::Update(void)
 {

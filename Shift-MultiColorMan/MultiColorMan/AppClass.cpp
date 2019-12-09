@@ -138,14 +138,36 @@ void Application::Update(void)
 	//Uncomment for debugging if camera movement needed
 	//CameraRotation();
 
+	if (m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetIsRespawned()) {
+		if (currentSteve == "RedSteve") {
+			matrix4 m4Position = glm::translate(steveTempPosition);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetIsRespawned(false);
+			currentSteve = "BlueSteve";
+
+			m4Position = glm::translate(vector3(-20, 0, 0));
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+		}
+	}
+
 	//If Steve falls off the map
 	if (m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().y <= -10.0f)
 	{
-		vector3 v3Position = steveStartingPosition;
-		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetPosition(steveStartingPosition);
-		currentSteve = "BlueSteve";
-		//matrix4 m4Position = glm::translate(v3Position);
-		//m_pEntityMngr->SetModelMatrix(m4Position);
+		if (currentSteve == "RedSteve") {
+			matrix4 m4Position = glm::translate(steveTempPosition);
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetIsRespawned(false);
+			currentSteve = "BlueSteve";
+
+			m4Position = glm::translate(vector3(-20, 0, 0));
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetModelMatrix(m4Position);
+		}
+		else if (currentSteve == "BlueSteve") {
+			vector3 v3Position = steveStartingPosition;
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetPosition(steveStartingPosition);
+		}
 	}
 
 

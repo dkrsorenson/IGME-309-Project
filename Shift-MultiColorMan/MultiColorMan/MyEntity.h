@@ -22,6 +22,8 @@ class MyEntity
 	int color;
 	//Tells whether to respawn or not
 	bool respawn = false;
+	//Tells whether to respawn or not
+	bool respawned = false;
 
 	bool m_bInMemory = false; //loaded flag
 	bool m_bSetAxis = false; //render axis flag
@@ -299,6 +301,9 @@ public:
 	OUTPUT: ---
 	*/
 
+	bool GetIsRespawned(void);
+
+	void SetIsRespawned(bool a_respawned);
 
 	void Update(void);
 	/*
