@@ -143,6 +143,7 @@ void Application::Update(void)
 	{
 		vector3 v3Position = steveStartingPosition;
 		m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetPosition(steveStartingPosition);
+		currentSteve = "BlueSteve";
 		//matrix4 m4Position = glm::translate(v3Position);
 		//m_pEntityMngr->SetModelMatrix(m4Position);
 	}
