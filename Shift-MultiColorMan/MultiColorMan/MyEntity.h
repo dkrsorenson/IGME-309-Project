@@ -20,6 +20,8 @@ enum eColor
 class MyEntity
 {
 	int color;
+	//Tells whether to respawn or not
+	bool respawn = false;
 
 	bool m_bInMemory = false; //loaded flag
 	bool m_bSetAxis = false; //render axis flag
@@ -289,6 +291,14 @@ public:
 	ARGUMENTS: ---
 	OUTPUT: ---
 	*/
+	void RespawnPlayer(bool);
+	/*
+	USAGE: Respawns the player to steveStartingPoint
+	ARGUMENTS: ---
+	OUTPUT: ---
+	*/
+
+
 	void Update(void);
 	/*
 	USAGE: Resolves using physics solver or not in the update

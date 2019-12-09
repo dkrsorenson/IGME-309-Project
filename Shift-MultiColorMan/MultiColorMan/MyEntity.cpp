@@ -11,7 +11,6 @@ void Simplex::MyEntity::SetModelMatrix(matrix4 a_m4ToWorld)
 {
 	if (!m_bInMemory)
 		return;
-
 	m_m4ToWorld = a_m4ToWorld;
 	m_pModel->SetModelMatrix(m_m4ToWorld);
 	m_pRigidBody->SetModelMatrix(m_m4ToWorld);
@@ -67,6 +66,18 @@ void Simplex::MyEntity::SetColor(int a_color)
 int Simplex::MyEntity::GetColor(void)
 {
 	return color;
+}
+
+void Simplex::MyEntity::RespawnPlayer(bool respawnR)
+{
+	if (respawnR == true)
+	{
+		//Set player Position to steveStartingPosition. Just hardcoding the value for now.
+		/*
+		matrix4 m4Model = glm::translate(vector3(-20, 0, 0));
+		m_pModel->SetModelMatrix(m4Model);
+		respawnR = false;*/
+	}
 }
 //  MyEntity
 void Simplex::MyEntity::Init(void)
@@ -304,6 +315,13 @@ bool Simplex::MyEntity::IsColliding(MyEntity* const other)
 	//if the colors match or if either color is neutral, check for collision
 	if (color == other->color || color == eColor::NEUTRAL || other->color == eColor::NEUTRAL)
 		return m_pRigidBody->IsColliding(other->GetRigidBody());
+	//If colors do not match, respawn player
+	if (color != other->color)
+	{
+		respawn = true;
+		RespawnPlayer(respawn);
+	}
+	
 	return false;
 }
 void Simplex::MyEntity::ClearCollisionList(void)

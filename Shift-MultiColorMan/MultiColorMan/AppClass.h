@@ -59,8 +59,10 @@ private:
 	String currentSteve = "BlueSteve";
 	vector3 steveTempPosition;
 	bool currentlySwitching = false;
+	
 
 public:
+	vector3 steveStartingPosition;
 #pragma region Constructor / Run / Destructor
 	/*
 	USAGE: Constructor
