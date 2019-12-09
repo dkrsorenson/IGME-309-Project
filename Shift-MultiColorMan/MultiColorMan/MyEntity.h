@@ -42,6 +42,7 @@ class MyEntity
 
 	MySolver* m_pSolver = nullptr; //Physics MySolver
 
+	bool currentlyRespawning = false;
 public:
 	/*
 	Usage: Constructor that specifies the name attached to the MyEntity

@@ -70,16 +70,20 @@ int Simplex::MyEntity::GetColor(void)
 
 void Simplex::MyEntity::RespawnPlayer(bool respawnR)
 {
+	if (currentlyRespawning)
+		return;
+
 	if (respawnR == true)
 	{
 		//Set player Position to steveStartingPosition. Just hardcoding the value for now.
 		//for some reason, it is taking all of the red blocks and moving them to this location
-		/*matrix4 m4Model = glm::translate(vector3(-20, 0, 0));
-		m_pModel->SetModelMatrix(m4Model);
-		respawn = false;*/
+		matrix4 m4Model = glm::translate(vector3(-20, 0, 0));
+		SetModelMatrix(m4Model);
+		respawn = false;
 	}
 	//If player Falls off map
 
+	currentlyRespawning = false;
 }
 //  MyEntity
 void Simplex::MyEntity::Init(void)
@@ -314,16 +318,16 @@ bool Simplex::MyEntity::IsColliding(MyEntity* const other)
 	if (!SharesDimension(other))
 		return false;
 	
+	return m_pRigidBody->IsColliding(other->GetRigidBody());
 	//if the colors match or if either color is neutral, check for collision
-	if (color == other->color || color == eColor::NEUTRAL || other->color == eColor::NEUTRAL)
-		return m_pRigidBody->IsColliding(other->GetRigidBody());
-	//If colors do not match, respawn player
-	if (color != other->color)
-	{
-		respawn = true;
-		RespawnPlayer(respawn);
-	}
-	return false;
+	//if (color == other->color || color == eColor::NEUTRAL || other->color == eColor::NEUTRAL)
+	////If colors do not match, respawn player
+	//if (color != other->color)
+	//{
+	//	respawn = true;
+	//	RespawnPlayer(respawn);
+	//}
+	//return false;
 }
 void Simplex::MyEntity::ClearCollisionList(void)
 {
@@ -361,7 +365,14 @@ void Simplex::MyEntity::ResolveCollision(MyEntity* a_pOther)
 {
 	if (m_bUsePhysicsSolver)
 	{
-		m_pSolver->ResolveCollision(a_pOther->GetSolver(), GetRigidBody()->GetCollidingPlane(a_pOther->GetRigidBody()));
+		if (color == a_pOther->color || color == eColor::NEUTRAL || a_pOther->color == eColor::NEUTRAL) {
+			m_pSolver->ResolveCollision(a_pOther->GetSolver(), GetRigidBody()->GetCollidingPlane(a_pOther->GetRigidBody()));//If colors do not match, respawn player
+		}
+		else if (color != a_pOther->color)
+		{
+			respawn = true;
+			RespawnPlayer(respawn);
+		}
 	}
 }
 void Simplex::MyEntity::UsePhysicsSolver(bool a_bUse)
