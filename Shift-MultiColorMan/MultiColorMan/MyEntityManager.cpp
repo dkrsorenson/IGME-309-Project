@@ -173,6 +173,8 @@ void Simplex::MyEntityManager::Update(void)
 		m_mEntityArray[i]->ClearCollisionList();
 		oct->AddEntity(i);
 	}
+	oct->Subdivide();
+	oct->PartitionEntities();
 
 	//check collisions
 	for (uint i = 0; i < m_uEntityCount - 1; i++)
@@ -180,7 +182,10 @@ void Simplex::MyEntityManager::Update(void)
 		std::vector<int> ea = oct->GetRelevantEntities(i);
 		for (uint j = 0; j < ea.size(); j++)
 		{
-			m_mEntityArray[i]->IsColliding(m_mEntityArray[ea[j]]);
+			if (m_mEntityArray[i]->IsColliding(m_mEntityArray[ea[j]]))
+			{
+				m_mEntityArray[i]->ResolveCollision(m_mEntityArray[ea[j]]);
+			}
 		}
 		m_mEntityArray[i]->Update();
 	}

@@ -33,7 +33,7 @@ namespace Simplex
 		Octant* m_pChild[8];//Will store the children of the current octant
 
 		std::vector<int> m_EntityList; //List of Entities under this octant (Index in Entity Manager)
-
+		std::vector<int> m_AllEntityList;
 	public:
 		/*
 		USAGE: Constructor, will create an octant containing all MagnaEntities Instances in the Mesh
@@ -95,6 +95,8 @@ namespace Simplex
 		bool ResizeToFit(int entity);
 
 		void AddEntity(int entity);
+		void PartitionEntities();
+		void AddEntityRecursive(int entity);
 		std::vector<int> GetAllEntities();
 		std::vector<int> GetRelevantEntities(int entity);
 
