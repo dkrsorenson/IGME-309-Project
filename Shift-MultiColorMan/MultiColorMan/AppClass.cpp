@@ -7,7 +7,7 @@ void Application::InitVariables(void)
 
 	currentSteve = "BlueSteve";
 	steveTempPosition = vector3(-100, -100, 0);
-	steveStartingPosition = vector3(-20, 0, 0);
+	steveStartingPosition = vector3(-25, 0, 0);
 
 	// Add blue steve
 	m_pEntityMngr->AddEntity("Minecraft\\BlueSteve.obj", "BlueSteve", eColor::BLUE);
@@ -29,100 +29,8 @@ void Application::InitVariables(void)
 		vector3(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().x, 2.0f, 5.0f),	//Target
 		AXIS_Y);					//Up
 	
-
-	//Array of the x-value of Platform Locations
-	float xPlatPosRed[25] = {
-		//1st block
-		-14.0f,-10.0f,-12.0f,
-		//2nd pixel block
-		0,
-		//4th series Pixel Blocks
-		14.0f, 20.0f, 36.0f, 38.0f,
-		//5th 
-		48.0f,52.0f, 56.0f
-		};
-
-	float yPlatPosRed[25] = {
-		//1st
-		0,0,0,
-		//2nd
-		2.0f,
-		//4th
-		0,2.0f,-2.0f, -2.0f,
-		//5th
-		0,0,0,0,
-		0,0,0,
-		0,0,0,
-		0,0,0,
-		0,0,0
-	};
-
-	float xPlatPosBlue[25] = {
-		//1st block
-		-10.0f, -12.0f, 
-		//3rd block
-		6.0f, 8.0f, 10.0f,
-		6.0f, 8.0f, 10.0f,
-		//4th Series Pixel Blocks
-		16.0f, 24.0f, 28.0f,
-		//5th
-		50.0f, 54.0f, 58.0f,
-		//6th
-		64.0f, 66.0f, 68.0f
-	};
-	float yPlatPosBlue[25] = {
-		//1st block
-		2.0f,2.0f,
-		//3rd Block
-		-2.0f,-2.0f,-2.0f,
-		-4.0f,-4.0f,-4.0f,
-		//4th
-		0,2.0f,4.0f,
-		//5th
-		0,0,0,
-		//6th
-		2.0f,2.0f, 2.0f,
-		0,0,
-		0,0,0
-	};
-
-	//Make Red Platforms
-	for (int i = 0; i < std::size(xPlatPosRed); i++)
-	{
-		m_pEntityMngr->AddEntity("Minecraft\\RedCube.obj", "Cube_" + std::to_string(i), eColor::RED);
-		//This puts a cube in every so often. Need to make an array of x and y positions, stick them together and make it look like a platformer.
-		vector3 v3Position = vector3(xPlatPosRed[i], yPlatPosRed[i],
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
-			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
-		matrix4 m4Position = glm::translate(v3Position);
-		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
-	}
-	//Make Blue Platforms
-	for (int i = 0; i < std::size(xPlatPosBlue); i++)
-	{
-		m_pEntityMngr->AddEntity("Minecraft\\BlueCube.obj", "Cube_" + std::to_string(i), eColor::BLUE);
-		vector3 v3Position = vector3(xPlatPosBlue[i], yPlatPosBlue[i],
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
-			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
-		matrix4 m4Position = glm::translate(v3Position);
-		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
-	}
-
-	//Beginning Platform
-	static float nextXPos = -28.0f;
-	for (int i = 0; i < 5; i++)
-	{
-		m_pEntityMngr->AddEntity("Minecraft\\BlueCube.obj", "Cube_" + std::to_string(i), eColor::BLUE);
-		vector3 v3Position = vector3(nextXPos, -6.0f, 
-			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
-			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
-		matrix4 m4Position = glm::translate(v3Position);
-		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
-
-		nextXPos += 2.0f;
-	}
-
-
+	// Set up the platforms
+	InitPlatforms();
 }
 
 void Application::Update(void)
@@ -208,6 +116,103 @@ void Application::Display(void)
 	//end the current frame (internally swaps the front and back buffers)
 	m_pWindow->display();
 }
+void Application::InitPlatforms(void)
+{
+	//Array of the x-value of Platform Locations
+	float xPlatPosRed[17] = {
+		//1st block
+		-14.0f,-12.0f,-10.0f,
+		//2nd pixel block
+		-2.0, -2.0, 8.0f,
+		//4th series Pixel Blocks
+		14.0f, 20.0f, 36.0f, 38.0f,
+		//5th 
+		48.0f,52.0f, 56.0f,
+		72.0f, 74.0f,
+		72.0f, 74.0f
+	};
+
+	float yPlatPosRed[17] = {
+		//1st
+		0,0,0,
+		0,8.0f,-4.0f,
+		0,0,0,0,
+		0,0,0,
+		6.0f,6.0f,
+		0,0
+	};
+
+	float xPlatPosBlue[16] = {
+		//1st block
+		-10.0f,-8.0f, 
+		//3rd block
+		6.0f, 10.0f,
+		6.0f, 10.0f,
+		//4th Series Pixel Blocks
+		16.0f, 24.0f, 28.0f,
+		//5th
+		50.0f, 54.0f, 58.0f,
+		64.0f, 66.0f,
+		78.0f, 80.0f
+	};
+	float yPlatPosBlue[16] = {
+		//1st block
+		2.0f,2.0f,
+		//3rd Block
+		-2.0f,-2.0f,
+		-4.0f,-4.0f,
+		//4th
+		0,2.0f,4.0f,
+		//5th
+		0,0,0,
+		-4.0f, -4.0f,
+		-4.0f, -4.0f
+	};
+
+	float xPlatPosNeutral[9] = {
+		-28.0f, -26.0f, -24.0f, -22.0f, -20.0f,
+		8.0f,
+		86.0f, 88.0f, 90.0f
+	};
+	float yPlatPosNeutral[9] = {
+		-6.0f,-6.0f,-6.0f,-6.0f,-6.0f,
+		6.0f,
+		2.0f,2.0f,2.0f
+	};
+
+	//Make Red Platforms
+	for (int i = 0; i < std::size(xPlatPosRed); i++)
+	{
+		m_pEntityMngr->AddEntity("Minecraft\\RedCube.obj", "Cube_" + std::to_string(i), eColor::RED);
+		vector3 v3Position = vector3(xPlatPosRed[i], yPlatPosRed[i],
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
+		matrix4 m4Position = glm::translate(v3Position);
+		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
+	}
+	//Make Blue Platforms
+	for (int i = 0; i < std::size(xPlatPosBlue); i++)
+	{
+		m_pEntityMngr->AddEntity("Minecraft\\BlueCube.obj", "Cube_" + std::to_string(i), eColor::BLUE);
+		vector3 v3Position = vector3(xPlatPosBlue[i], yPlatPosBlue[i],
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
+		matrix4 m4Position = glm::translate(v3Position);
+		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
+	}
+
+	// Make Neutral Platforms
+	for (int i = 0; i < std::size(xPlatPosNeutral); i++)
+	{
+		m_pEntityMngr->AddEntity("Minecraft\\Cube.obj", "Cube_" + std::to_string(i), eColor::NEUTRAL);
+		vector3 v3Position = vector3(xPlatPosNeutral[i], yPlatPosNeutral[i],
+			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->GetPosition().z -
+			(m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex("Cube_"))->GetRigidBody()->GetHalfWidth().z));
+		matrix4 m4Position = glm::translate(v3Position);
+		m_pEntityMngr->SetModelMatrix(m4Position * glm::scale(vector3(2.0f)));
+	}
+}
+
 void Application::Release(void)
 {
 	//Release MyEntityManager

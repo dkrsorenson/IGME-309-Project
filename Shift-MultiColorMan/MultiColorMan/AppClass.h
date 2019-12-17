@@ -134,6 +134,12 @@ private:
 	*/
 	void WriteConfig(void);
 	/*
+	USAGE: Creates the platforms when intializing
+	ARGUMENTS: ---
+	OUTPUT: ---
+	*/
+	void InitPlatforms(void);
+	/*
 	USAGE: Releases the application
 	ARGUMENTS: ---
 	OUTPUT: ---
