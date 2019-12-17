@@ -11,6 +11,7 @@ Date: 11/2019
 #include "imgui\ImGuiObject.h"
 
 #include "MyEntityManager.h"
+#include "MyOctant.h"
 
 namespace Simplex
 {
@@ -59,6 +60,8 @@ private:
 	String currentSteve = "BlueSteve";
 	vector3 steveTempPosition;
 	bool currentlySwitching = false;
+
+	MyOctant* oct = nullptr;
 
 public:
 	vector3 steveStartingPosition;

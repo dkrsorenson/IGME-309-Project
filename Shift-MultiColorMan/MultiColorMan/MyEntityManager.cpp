@@ -167,29 +167,7 @@ Simplex::MyEntityManager::~MyEntityManager(){Release();};
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
-	Octant* oct = new Octant(3);
-	for (uint i = 0; i < m_uEntityCount; i++)
-	{
-		m_mEntityArray[i]->ClearCollisionList();
-		oct->AddEntity(i);
-	}
-	oct->Subdivide();
-	oct->PartitionEntities();
 
-	//check collisions
-	for (uint i = 0; i < m_uEntityCount - 1; i++)
-	{
-		std::vector<int> ea = oct->GetRelevantEntities(i);
-		for (uint j = 0; j < ea.size(); j++)
-		{
-			if (m_mEntityArray[i]->IsColliding(m_mEntityArray[ea[j]]))
-			{
-				m_mEntityArray[i]->ResolveCollision(m_mEntityArray[ea[j]]);
-			}
-		}
-		m_mEntityArray[i]->Update();
-	}
-	oct->Display();
 }
 void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID, int color)
 {

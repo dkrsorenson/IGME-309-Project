@@ -86,6 +86,8 @@ void Application::InitVariables(void)
 		0,0,0
 	};
 
+	oct = new MyOctant(3);
+
 	//Make Red Platforms
 	for (int i = 0; i < std::size(xPlatPosRed); i++)
 	{
@@ -122,7 +124,14 @@ void Application::InitVariables(void)
 		nextXPos += 2.0f;
 	}
 
-
+	int m_uEntityCount = m_pEntityMngr->GetEntityCount();
+	for (uint i = 0; i < m_uEntityCount; i++)
+	{
+		m_pEntityMngr->GetEntity(i)->ClearCollisionList();
+		oct->AddEntity(i);
+	}
+	oct->Subdivide();
+	oct->PartitionEntities();
 }
 
 void Application::Update(void)
@@ -169,7 +178,20 @@ void Application::Update(void)
 			m_pEntityMngr->GetEntity(m_pEntityMngr->GetEntityIndex(currentSteve))->SetPosition(steveStartingPosition);
 		}
 	}
-
+	//check collisions
+	for (uint i = 0; i < 2; i++)
+	{
+		std::vector<int> ea = oct->GetRelevantEntities(i);
+		for (uint j = 0; j < ea.size(); j++)
+		{
+			if (m_pEntityMngr->GetEntity(i)->IsColliding(m_pEntityMngr->GetEntity(ea[j])))
+			{
+				m_pEntityMngr->GetEntity(i)->ResolveCollision(m_pEntityMngr->GetEntity(ea[j]));
+			}
+		}
+		m_pEntityMngr->GetEntity(i)->Update();
+	}
+	oct->Display();
 
 	//comment this chunk if camera movement needed during debugging
 	//Set the position and target of the camera

@@ -1,15 +1,15 @@
-#include "Octant.h"
+#include "MyOctant.h"
 
 namespace Simplex {
 
-	uint Simplex::Octant::m_uMaxLevel = 3;
+	uint Simplex::MyOctant::m_uMaxLevel = 3;
 
-	Octant::Octant(uint a_nMaxLevel)
+	MyOctant::MyOctant(uint a_nMaxLevel)
 	{
 		m_pMeshMngr = MeshManager::GetInstance();
 		m_uLevel = 0;
 	}
-	Octant::Octant(vector3 a_v3Center, vector3 a_v3Size, uint a_uLevel)
+	MyOctant::MyOctant(vector3 a_v3Center, vector3 a_v3Size, uint a_uLevel)
 	{
 		m_pMeshMngr = MeshManager::GetInstance();
 		m_v3Center = a_v3Center;
@@ -19,10 +19,10 @@ namespace Simplex {
 		m_uLevel = a_uLevel;
 		Subdivide();
 	}
-	Octant::~Octant(void)
+	MyOctant::~MyOctant(void)
 	{
 	}
-	void Octant::Display(vector3 a_v3Color)
+	void MyOctant::Display(vector3 a_v3Color)
 	{
 		for (uint i = 0; i < 8; i++)
 		{
@@ -33,10 +33,10 @@ namespace Simplex {
 		}
 		m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_v3Center) * glm::scale(m_v3Max - m_v3Min), a_v3Color);
 	}
-	void Octant::ClearEntityList(void)
+	void MyOctant::ClearEntityList(void)
 	{
 	}
-	void Octant::Subdivide(void)
+	void MyOctant::Subdivide(void)
 	{
 		if (m_uLevel >= m_uMaxLevel)
 			return;
@@ -44,28 +44,28 @@ namespace Simplex {
 		vector3 hw = (m_v3Max - m_v3Min) / 2;
 		hw.z *= 2;
 		vector3 qw = hw / 2;
-		m_pChild[0] = new Octant(m_v3Center + vector3(qw.x, qw.y, 0), hw, m_uLevel + 1);
+		m_pChild[0] = new MyOctant(m_v3Center + vector3(qw.x, qw.y, 0), hw, m_uLevel + 1);
 		//m_pChild[1] = new Octant(m_v3Center + vector3(qw.x, qw.y, -qw.z), hw, m_uLevel + 1);
-		m_pChild[2] = new Octant(m_v3Center + vector3(qw.x, -qw.y, 0), hw, m_uLevel + 1);
+		m_pChild[2] = new MyOctant(m_v3Center + vector3(qw.x, -qw.y, 0), hw, m_uLevel + 1);
 		//m_pChild[3] = new Octant(m_v3Center + vector3(qw.x, -qw.y, -qw.z), hw, m_uLevel + 1);
-		m_pChild[4] = new Octant(m_v3Center + vector3(-qw.x, qw.y, 0), hw, m_uLevel + 1);
+		m_pChild[4] = new MyOctant(m_v3Center + vector3(-qw.x, qw.y, 0), hw, m_uLevel + 1);
 		//m_pChild[5] = new Octant(m_v3Center + vector3(-qw.x, qw.y, -qw.z), hw, m_uLevel + 1);
-		m_pChild[6] = new Octant(m_v3Center + vector3(-qw.x, -qw.y, 0), hw, m_uLevel + 1);
+		m_pChild[6] = new MyOctant(m_v3Center + vector3(-qw.x, -qw.y, 0), hw, m_uLevel + 1);
 		//m_pChild[7] = new Octant(m_v3Center + vector3(-qw.x, -qw.y, -qw.z), hw, m_uLevel + 1);
 	}
-	bool Octant::IsLeaf(void)
+	bool MyOctant::IsLeaf(void)
 	{
 		return m_uChildren == 0;
 	}
-	void Octant::KillBranches(void)
+	void MyOctant::KillBranches(void)
 	{
 	}
-	int Octant::GetOctant(int entity)
+	int MyOctant::GetOctant(int entity)
 	{
 		vector3 max = MyEntityManager::GetInstance()->GetEntity(entity)->GetRigidBody()->GetMaxGlobal();
 		vector3 min = MyEntityManager::GetInstance()->GetEntity(entity)->GetRigidBody()->GetMinGlobal();
-		if (min.x > m_v3Center.x) {
-			if (min.y > m_v3Center.y) {
+		if (min.x >= m_v3Center.x) {
+			if (min.y >= m_v3Center.y) {
 				return 0;
 				/*if (min.z > m_v3Center.z) {
 					return 0;
@@ -74,7 +74,7 @@ namespace Simplex {
 					return 1;
 				}*/
 			}
-			if (max.y < m_v3Center.y) {
+			if (max.y <= m_v3Center.y) {
 				return 2;
 				/*if (min.z > m_v3Center.z) {
 					return 0;
@@ -84,8 +84,8 @@ namespace Simplex {
 				}*/
 			}
 		}
-		if (max.x < m_v3Center.x) {
-			if (min.y > m_v3Center.y) {
+		if (max.x <= m_v3Center.x) {
+			if (min.y >= m_v3Center.y) {
 				return 4;
 				/*if (min.z > m_v3Center.z) {
 					return 0;
@@ -94,7 +94,7 @@ namespace Simplex {
 					return 1;
 				}*/
 			}
-			if (max.y < m_v3Center.y) {
+			if (max.y <= m_v3Center.y) {
 				return 6;
 				/*if (min.z > m_v3Center.z) {
 					return 0;
@@ -106,7 +106,7 @@ namespace Simplex {
 		}
 		return -1;
 	}
-	bool Octant::ResizeToFit(int entity)
+	bool MyOctant::ResizeToFit(int entity)
 	{
 		vector3 oldmax = m_v3Max;
 		vector3 oldmin = m_v3Min;
@@ -132,17 +132,17 @@ namespace Simplex {
 		}
 		return oldmax != m_v3Max || oldmin != m_v3Min;
 	}
-	void Octant::AddEntity(int entity)
+	void MyOctant::AddEntity(int entity)
 	{
 		ResizeToFit(entity);
 		m_AllEntityList.push_back(entity);
 	}
-	void Octant::PartitionEntities() {
+	void MyOctant::PartitionEntities() {
 		for (int i = 0; i < m_AllEntityList.size(); i++) {
 			AddEntityRecursive(m_AllEntityList[i]);
 		}
 	}
-	void Octant::AddEntityRecursive(int entity) {
+	void MyOctant::AddEntityRecursive(int entity) {
 		if (IsLeaf()) {
 			m_EntityList.push_back(entity);
 			return;
@@ -157,7 +157,7 @@ namespace Simplex {
 		m_EntityList.push_back(entity);
 		return;
 	}
-	std::vector<int> Octant::GetAllEntities() {
+	std::vector<int> MyOctant::GetAllEntities() {
 		std::vector<int> ae = std::vector<int>();
 		for (int i = 0; i < m_EntityList.size(); i++) {
 			ae.push_back(m_EntityList[i]);
@@ -174,9 +174,9 @@ namespace Simplex {
 		return ae;
 	}
 
-	std::vector<int> Octant::GetRelevantEntities(int entity)
+	std::vector<int> MyOctant::GetRelevantEntities(int entity)
 	{
-		if (IsLeaf() || 1) {
+		if (IsLeaf()) {
 			return GetAllEntities();
 		}
 		int octant = GetOctant(entity);
@@ -193,7 +193,7 @@ namespace Simplex {
 		}
 		return ae;
 	}
-	void Octant::Release(void)
+	void MyOctant::Release(void)
 	{
 	}
 }

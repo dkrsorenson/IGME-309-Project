@@ -2,8 +2,8 @@
 Programmer: Alberto Bobadilla (labigm@gmail.com)
 Date: 2017/07
 ----------------------------------------------*/
-#ifndef __OCTANTCLASS_H_
-#define __OCTANTCLASS_H_
+#ifndef __MYOCTANTCLASS_H_
+#define __MYOCTANTCLASS_H_
 
 #include "Definitions.h"
 #include "MyEntityManager.h"
@@ -12,7 +12,7 @@ namespace Simplex
 {
 
 	//System Class
-	class Octant
+	class MyOctant
 	{
 		static uint m_uMaxLevel;//will store the maximum level an octant can go to
 
@@ -29,8 +29,8 @@ namespace Simplex
 		vector3 m_v3Min = vector3(0.0f); //Will store the minimum vector of the octant
 		vector3 m_v3Max = vector3(0.0f); //Will store the maximum vector of the octant
 
-		Octant* m_pParent = nullptr;// Will store the parent of current octant
-		Octant* m_pChild[8];//Will store the children of the current octant
+		MyOctant* m_pParent = nullptr;// Will store the parent of current octant
+		MyOctant* m_pChild[8];//Will store the children of the current octant
 
 		std::vector<int> m_EntityList; //List of Entities under this octant (Index in Entity Manager)
 		std::vector<int> m_AllEntityList;
@@ -43,7 +43,7 @@ namespace Simplex
 		- uint nIdealEntityCount = 5 -> Sets the ideal level of objects per octant
 		OUTPUT: class object
 		*/
-		Octant(uint a_nMaxLevel = 2);
+		MyOctant(uint a_nMaxLevel = 2);
 		/*
 		USAGE: Constructor
 		ARGUMENTS:
@@ -51,13 +51,13 @@ namespace Simplex
 		- float a_fSize -> size of each side of the octant volume
 		OUTPUT: class object
 		*/
-		Octant(vector3 a_v3Center, vector3 a_v3Size, uint a_uLevel);
+		MyOctant(vector3 a_v3Center, vector3 a_v3Size, uint a_uLevel);
 		/*
 		USAGE: Destructor
 		ARGUMENTS: ---
 		OUTPUT: ---
 		*/
-		~Octant(void);
+		~MyOctant(void);
 		/*
 		USAGE: Displays the MyOctant volume in the color specified
 		ARGUMENTS:
