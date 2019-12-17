@@ -167,26 +167,7 @@ Simplex::MyEntityManager::~MyEntityManager(){Release();};
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
-	//Clear all collisions
-	for (uint i = 0; i < m_uEntityCount; i++)
-	{
-		m_mEntityArray[i]->ClearCollisionList();
-	}
-	
-	//check collisions
-	for (uint i = 0; i < m_uEntityCount; i++)
-	{
-		for (uint j = i + 1; j < m_uEntityCount; j++)
-		{
-			//if objects are colliding resolve the collision
-			if (m_mEntityArray[i]->IsColliding(m_mEntityArray[j]))
-			{
-				m_mEntityArray[i]->ResolveCollision(m_mEntityArray[j]);
-			}
-		}
-		//Update each entity
-		m_mEntityArray[i]->Update();
-	}
+
 }
 void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID, int color)
 {
@@ -213,7 +194,7 @@ void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID,
 		//make the member pointer the temp pointer
 		m_mEntityArray = tempArray;
 		//add one entity to the count
-		++m_uEntityCount;
+		m_uEntityCount++;
 	}
 }
 void Simplex::MyEntityManager::RemoveEntity(uint a_uIndex)

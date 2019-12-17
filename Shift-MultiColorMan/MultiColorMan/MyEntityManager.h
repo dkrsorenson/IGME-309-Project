@@ -6,6 +6,7 @@ Date: 11/2019
 #define __MYENTITYMANAGER_H_
 
 #include "MyEntity.h"
+#include "MyOctant.h"
 
 namespace Simplex
 {
