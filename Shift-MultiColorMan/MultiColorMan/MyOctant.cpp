@@ -31,7 +31,7 @@ namespace Simplex {
 				m_pChild[i]->Display(a_v3Color);
 			}
 		}
-		m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_v3Center) * glm::scale(m_v3Max - m_v3Min), a_v3Color);
+		//m_pMeshMngr->AddWireCubeToRenderList(glm::translate(m_v3Center) * glm::scale(m_v3Max - m_v3Min), a_v3Color);
 	}
 	void MyOctant::ClearEntityList(void)
 	{
